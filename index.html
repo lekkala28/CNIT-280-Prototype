@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Special Space</title>
+
+  <!-- Unique futuristic font -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a0033; /* dark purple */
+      color: white;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100%;
+      background-color: black;
+      padding-top: 30px;
+    }
+
+    .sidebar button {
+      display: block;
+      width: 80%;
+      margin: 15px auto;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .sidebar button:hover {
+      background-color: #d9d9d9;
+    }
+
+    /* MAIN CONTENT */
+    .main {
+      margin-left: 220px;
+      padding: 40px;
+      text-align: center;
+    }
+
+    /* TITLE */
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 48px;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+
+    /* DESCRIPTION TEXT */
+    .description {
+      max-width: 650px;
+      margin: 20px auto 10px auto;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    /* IMAGE CENTERED */
+    .hero-image {
+      width: 420px;
+      max-width: 90%;
+      border-radius: 15px;
+      margin: 25px auto 0 auto;
+      display: block;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <button onclick="alert('Home')">Home</button>
+    <button onclick="alert('Dashboard')">Dashboard</button>
+    <button onclick="alert('Profile')">Profile</button>
+    <button onclick="alert('Events')">Events</button>
+    <button onclick="alert('Resources')">Resources</button>
+    <button onclick="alert('Help')">Help</button>
+    <button onclick="alert('Logout')">Logout</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <h1>Special Space</h1>
+
+    <div class="description">
+      Special Space connects families, caregivers, and individuals with special needs
+      to local events, community resources, and supportive networks in Whispering Hills.
+      Built for accessibility and inclusion, it helps people find meaningful connections
+      and reliable support.
+    </div>
+
+    <!-- FIXED IMAGE PATH -->
+    <img class="hero-image" src="./images/space.png" alt="Special Space logo">
+
+  </div>
+
+</body>
+</html>
