@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Special Space – Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --accent:#b347ff; --accent2:#5ef0c8; --text:#e8d5ff; --muted:#8a7aa0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Nunito',sans-serif; background:#0d001f; color:var(--text); min-height:100vh; display:flex; align-items:center; justify-content:center; background-image:radial-gradient(ellipse at 30% 30%,rgba(100,0,180,.2) 0%,transparent 60%); }
+    .box { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:48px 40px; width:100%; max-width:400px; text-align:center; }
+    h1 { font-family:'Orbitron',sans-serif; font-size:22px; letter-spacing:3px; background:linear-gradient(135deg,#c97bff,#5ef0c8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:8px; }
+    p { color:var(--muted); font-size:14px; margin-bottom:30px; }
+    input { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px 14px; color:var(--text); font-family:'Nunito',sans-serif; font-size:14px; outline:none; margin-bottom:14px; }
+    input:focus { border-color:rgba(179,71,255,0.5); }
+    button { width:100%; padding:14px; background:linear-gradient(135deg,var(--accent),#6a0dad); color:white; font-family:'Orbitron',sans-serif; font-size:13px; letter-spacing:2px; border:none; border-radius:12px; cursor:pointer; font-weight:700; margin-top:6px; }
+    .back { display:block; margin-top:20px; color:var(--muted); font-size:13px; text-decoration:none; }
+    .back:hover { color:var(--accent2); }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>SPECIAL SPACE</h1>
+    <p>Sign in to your account</p>
+    <input type="email" placeholder="Email address">
+    <input type="password" placeholder="Password">
+    <button onclick="window.location='index.html'">SIGN IN</button>
+    <a class="back" href="index.html">← Back to Home</a>
+  </div>
+</body>
+</html>

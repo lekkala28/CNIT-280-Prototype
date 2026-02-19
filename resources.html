@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Special Space – Resources</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0d001f; --sidebar-bg:#07000f; --accent:#b347ff; --accent2:#5ef0c8; --card-bg:rgba(255,255,255,0.04); --card-border:rgba(255,255,255,0.08); --text:#e8d5ff; --muted:#8a7aa0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Nunito',sans-serif; background-color:var(--bg); color:var(--text); min-height:100vh; background-image:radial-gradient(ellipse at 20% 20%,rgba(100,0,180,.18) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(0,180,150,.1) 0%,transparent 60%); }
+    .sidebar { position:fixed; left:0; top:0; width:220px; height:100%; background-color:var(--sidebar-bg); border-right:1px solid var(--card-border); padding-top:30px; display:flex; flex-direction:column; gap:4px; z-index:100; }
+    .sidebar .logo { font-family:'Orbitron',sans-serif; font-size:13px; letter-spacing:2px; color:var(--accent); text-align:center; padding:0 20px 24px; border-bottom:1px solid var(--card-border); margin-bottom:10px; }
+    .sidebar a { display:flex; align-items:center; gap:10px; width:85%; margin:0 auto; padding:11px 16px; border-radius:10px; color:var(--muted); font-weight:600; font-size:14px; text-decoration:none; transition:all .2s ease; }
+    .sidebar a:hover { background-color:rgba(179,71,255,.12); color:var(--text); }
+    .sidebar a.active { background:linear-gradient(135deg,rgba(179,71,255,.25),rgba(94,240,200,.1)); color:white; border:1px solid rgba(179,71,255,.3); }
+    .sidebar .spacer { flex:1; }
+    .sidebar a.logout { margin-bottom:20px; color:#ff6b6b88; }
+    .sidebar a.logout:hover { background:rgba(255,80,80,.1); color:#ff8888; }
+    .main { margin-left:220px; padding:50px; }
+    h2 { font-family:'Orbitron',sans-serif; font-size:28px; letter-spacing:2px; background:linear-gradient(135deg,#c97bff,#5ef0c8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:10px; }
+    .coming-soon { margin-top:80px; text-align:center; color:var(--muted); font-size:18px; }
+    .coming-soon .icon { font-size:64px; margin-bottom:20px; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">✦ SPECIAL SPACE</div>
+    <a href="index.html">🏠&nbsp; Home</a>
+    <a href="dashboard.html">📊&nbsp; Dashboard</a>
+    <a href="profile.html">👤&nbsp; Profile</a>
+    <a href="resources.html" class="active">📚&nbsp; Resources</a>
+    <a href="resources.html">📚&nbsp; Resources</a>
+    <a href="help.html">💬&nbsp; Help</a>
+    <div class="spacer"></div>
+    <a href="login.html" class="logout">🚪&nbsp; Logout</a>
+  </div>
+  <div class="main">
+    <h2>RESOURCES</h2>
+    <div class="coming-soon">
+      <div class="icon">📚</div>
+      <p>Resources page coming soon!</p>
+    </div>
+  </div>
+</body>
+</html>
