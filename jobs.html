@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Open Jobs | Special Space</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a0033;
+      color: white;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100%;
+      background-color: black;
+      padding-top: 30px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+    }
+
+    .sidebar button {
+      display: block;
+      width: 80%;
+      margin: 15px auto;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .sidebar button:hover {
+      background-color: #d9d9d9;
+    }
+
+    .main {
+      margin-left: 220px;
+      padding: 40px;
+      max-width: 950px;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 42px;
+      letter-spacing: 3px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .intro {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: #2a0055;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .card h3 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: none;
+      background: #140026;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    input.invalid, textarea.invalid {
+      border: 2px solid #ff4d4d;
+    }
+
+    .action-btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: white;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .action-btn:hover {
+      background: #d9d9d9;
+    }
+
+    .delete-btn {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .clear-btn {
+      background: #ff4d4d;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .clear-btn:hover {
+      opacity: 0.95;
+    }
+
+    .info {
+      font-size: 15px;
+      margin: 4px 0;
+      line-height: 1.5;
+    }
+
+    .meta {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 8px;
+    }
+
+    .confirmation {
+      display: none;
+      background: #1a4d1a;
+      border-left: 5px solid #33cc33;
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    .empty-msg {
+      text-align: center;
+      font-size: 16px;
+      opacity: 0.85;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar">
+    <a href="index.html"><button>Home</button></a>
+    <a href="dashboard.html"><button>Dashboard</button></a>
+    <a href="profile.html"><button>Profile</button></a>
+    <a href="events.html"><button>Events</button></a>
+    <a href="jobs.html"><button>Open Jobs</button></a>
+    <a href="volunteer.html"><button>Volunteer</button></a>
+    <a href="help.html"><button>Help</button></a>
+    <a href="success.html"><button>Success Stories</button></a>
+    <a href="contact.html"><button>Contact</button></a>
+  </div>
+
+  <div class="main">
+
+    <h1>Open Jobs</h1>
+
+    <div class="intro">
+      Browse available job postings from local employers in the Whispering Hills community.
+      Employers can add new listings using the form below.
+    </div>
+
+    <div id="confirmation" class="confirmation">
+      Job posting submitted successfully!
+    </div>
+
+    <button class="action-btn" id="toggleFormBtn" onclick="toggleForm()">Add Job Posting</button>
+
+    <div id="formSection" class="card" style="display:none; margin-top: 20px;">
+      <h3>New Job Posting</h3>
+
+      <form id="jobForm" novalidate>
+        <label>Job Title *</label>
+        <input id="jobTitle" type="text" placeholder="e.g., Part-time Office Assistant" />
+
+        <label>Company Name *</label>
+        <input id="companyName" type="text" placeholder="e.g., Whispering Hills Library" />
+
+        <label>Job Description *</label>
+        <textarea id="jobDescription" placeholder="Describe the role, responsibilities, and any requirements..."></textarea>
+
+        <label>Compensation / Pay Rate</label>
+        <input id="compensation" type="text" placeholder="e.g., $15/hr, Stipend, Volunteer-based" />
+
+        <label>Contact Email *</label>
+        <input id="contactEmail" type="email" placeholder="e.g., hiring@example.com" />
+
+        <div>
+          <button class="action-btn" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+
+    <h2 style="margin-top: 30px; font-family: 'Orbitron', sans-serif; font-size: 24px; letter-spacing: 2px;">Current Listings</h2>
+
+    <div id="jobsList"></div>
+    <div id="emptyMsg" class="empty-msg" style="display:none;">No job postings yet. Be the first to add one!</div>
+
+    <button class="clear-btn" onclick="clearAllJobs()">Clear All Postings</button>
+
+  </div>
+
+<script>
+var JOBS_KEY = "special_space_jobs_v1";
+
+function escapeHtml(str) {
+  return String(str || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function loadJobs() {
+  try {
+    var raw = localStorage.getItem(JOBS_KEY);
+    var parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveJobs(jobs) {
+  localStorage.setItem(JOBS_KEY, JSON.stringify(jobs));
+}
+
+function toggleForm() {
+  var section = document.getElementById("formSection");
+  var btn = document.getElementById("toggleFormBtn");
+  if (section.style.display === "none") {
+    section.style.display = "block";
+    btn.textContent = "Cancel";
+  } else {
+    section.style.display = "none";
+    btn.textContent = "Add Job Posting";
+    clearValidation();
+  }
+}
+
+function clearValidation() {
+  var inputs = document.querySelectorAll("#jobForm input, #jobForm textarea");
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].classList.remove("invalid");
+  }
+}
+
+function showConfirmation() {
+  var el = document.getElementById("confirmation");
+  el.style.display = "block";
+  setTimeout(function() {
+    el.style.display = "none";
+  }, 4000);
+}
+
+document.getElementById("jobForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  clearValidation();
+
+  var titleEl = document.getElementById("jobTitle");
+  var companyEl = document.getElementById("companyName");
+  var descEl = document.getElementById("jobDescription");
+  var compEl = document.getElementById("compensation");
+  var emailEl = document.getElementById("contactEmail");
+
+  var title = titleEl.value.trim();
+  var company = companyEl.value.trim();
+  var description = descEl.value.trim();
+  var compensation = compEl.value.trim();
+  var email = emailEl.value.trim();
+
+  var valid = true;
+
+  if (!title) {
+    titleEl.classList.add("invalid");
+    valid = false;
+  }
+  if (!company) {
+    companyEl.classList.add("invalid");
+    valid = false;
+  }
+  if (!description) {
+    descEl.classList.add("invalid");
+    valid = false;
+  }
+  if (!email) {
+    emailEl.classList.add("invalid");
+    valid = false;
+  }
+
+  if (!valid) {
+    alert("Please complete all required fields before submitting.");
+    return;
+  }
+
+  var jobs = loadJobs();
+  jobs.push({
+    id: (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+    title: title,
+    company: company,
+    description: description,
+    compensation: compensation,
+    email: email,
+    createdAt: Date.now()
+  });
+
+  saveJobs(jobs);
+
+  titleEl.value = "";
+  companyEl.value = "";
+  descEl.value = "";
+  compEl.value = "";
+  emailEl.value = "";
+
+  document.getElementById("formSection").style.display = "none";
+  document.getElementById("toggleFormBtn").textContent = "Add Job Posting";
+
+  showConfirmation();
+  renderJobs();
+});
+
+function deleteJob(id) {
+  var jobs = loadJobs();
+  jobs = jobs.filter(function(j) { return j.id !== id; });
+  saveJobs(jobs);
+  renderJobs();
+}
+
+function clearAllJobs() {
+  if (confirm("Clear all job postings?")) {
+    localStorage.removeItem(JOBS_KEY);
+    renderJobs();
+  }
+}
+
+function renderJobs() {
+  var jobs = loadJobs();
+  var listEl = document.getElementById("jobsList");
+  var emptyEl = document.getElementById("emptyMsg");
+
+  listEl.innerHTML = "";
+
+  if (jobs.length === 0) {
+    emptyEl.style.display = "block";
+    return;
+  }
+
+  emptyEl.style.display = "none";
+
+  jobs.sort(function(a, b) {
+    return (b.createdAt || 0) - (a.createdAt || 0);
+  });
+
+  for (var i = 0; i < jobs.length; i++) {
+    var j = jobs[i];
+    var div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML =
+      "<h3>" + escapeHtml(j.title) + "</h3>" +
+      "<div class='info'><strong>Company:</strong> " + escapeHtml(j.company) + "</div>" +
+      "<div class='info'>" + escapeHtml(j.description) + "</div>" +
+      (j.compensation ? "<div class='info'><strong>Compensation:</strong> " + escapeHtml(j.compensation) + "</div>" : "") +
+      "<div class='info'><strong>Contact:</strong> " + escapeHtml(j.email) + "</div>" +
+      "<div class='meta'>Posted: " + new Date(j.createdAt).toLocaleString() + "</div>" +
+      "<button class='delete-btn' onclick=\"deleteJob('" + j.id + "')\">Delete</button>";
+
+    listEl.appendChild(div);
+  }
+}
+
+renderJobs();
+</script>
+
+</body>
+</html>
