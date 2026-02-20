@@ -1,240 +1,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Special Space – Home</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <title>Special Space</title>
+
+  <!-- Unique futuristic font -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
-    :root {
-      --bg: #0d001f;
-      --sidebar-bg: #07000f;
-      --accent: #b347ff;
-      --accent2: #5ef0c8;
-      --card-bg: rgba(255,255,255,0.04);
-      --card-border: rgba(255,255,255,0.08);
-      --text: #e8d5ff;
-      --muted: #8a7aa0;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
-      font-family: 'Nunito', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      background-image:
-        radial-gradient(ellipse at 20% 20%, rgba(100, 0, 180, 0.18) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 80%, rgba(0, 180, 150, 0.1) 0%, transparent 60%);
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a0033; /* dark purple */
+      color: white;
     }
 
     /* SIDEBAR */
     .sidebar {
       position: fixed;
-      left: 0; top: 0;
+      left: 0;
+      top: 0;
       width: 220px;
       height: 100%;
-      background-color: var(--sidebar-bg);
-      border-right: 1px solid var(--card-border);
+      background-color: black;
       padding-top: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      z-index: 100;
     }
 
-    .sidebar .logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 13px;
-      letter-spacing: 2px;
-      color: var(--accent);
-      text-align: center;
-      padding: 0 20px 24px 20px;
-      border-bottom: 1px solid var(--card-border);
-      margin-bottom: 10px;
+    .sidebar button {
+      display: block;
+      width: 80%;
+      margin: 15px auto;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .sidebar a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 85%;
-      margin: 0 auto;
-      padding: 11px 16px;
-      border-radius: 10px;
-      color: var(--muted);
-      font-weight: 600;
-      font-size: 14px;
-      text-decoration: none;
-      transition: all 0.2s ease;
+    .sidebar button:hover {
+      background-color: #d9d9d9;
     }
 
-    .sidebar a:hover {
-      background-color: rgba(179, 71, 255, 0.12);
-      color: var(--text);
-    }
-
-    .sidebar a.active {
-      background: linear-gradient(135deg, rgba(179,71,255,0.25), rgba(94,240,200,0.1));
-      color: white;
-      border: 1px solid rgba(179,71,255,0.3);
-    }
-
-    .sidebar .spacer { flex: 1; }
-
-    .sidebar a.logout {
-      margin-bottom: 20px;
-      color: #ff6b6b88;
-    }
-    .sidebar a.logout:hover { background: rgba(255,80,80,0.1); color: #ff8888; }
-
-    /* MAIN */
+    /* MAIN CONTENT */
     .main {
       margin-left: 220px;
-      padding: 60px 50px;
-    }
-
-    /* HOME PAGE */
-    .hero {
+      padding: 40px;
       text-align: center;
-      padding: 60px 20px 40px;
     }
 
-    .hero h1 {
+    /* TITLE */
+    h1 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 52px;
-      font-weight: 900;
-      letter-spacing: 4px;
-      background: linear-gradient(135deg, #c97bff, #5ef0c8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: 48px;
+      letter-spacing: 3px;
       margin-bottom: 20px;
     }
 
-    .hero p {
-      max-width: 600px;
-      margin: 0 auto 40px auto;
+    /* DESCRIPTION TEXT */
+    .description {
+      max-width: 650px;
+      margin: 20px auto 10px auto;
       font-size: 18px;
-      line-height: 1.7;
-      color: var(--muted);
-    }
-
-    .hero-image {
-      width: 380px;
-      max-width: 90%;
-      border-radius: 20px;
-      margin: 0 auto 60px auto;
-      display: block;
-      box-shadow: 0 0 60px rgba(179,71,255,0.3);
-      border: 1px solid rgba(179,71,255,0.2);
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 24px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .feature-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 28px 24px;
-      text-align: left;
-      transition: border-color 0.3s, transform 0.2s;
-    }
-
-    .feature-card:hover {
-      border-color: rgba(179,71,255,0.4);
-      transform: translateY(-3px);
-    }
-
-    .feature-icon {
-      font-size: 32px;
-      margin-bottom: 14px;
-    }
-
-    .feature-card h3 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 14px;
-      letter-spacing: 1px;
-      color: var(--accent2);
-      margin-bottom: 10px;
-    }
-
-    .feature-card p {
-      font-size: 14px;
       line-height: 1.6;
-      color: var(--muted);
     }
 
-    .cta-btn {
-      display: inline-block;
-      margin-top: 50px;
-      padding: 14px 36px;
-      background: linear-gradient(135deg, var(--accent), #6a0dad);
-      color: white;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 13px;
-      letter-spacing: 2px;
-      border-radius: 30px;
-      text-decoration: none;
-      font-weight: 700;
-      box-shadow: 0 4px 30px rgba(179,71,255,0.4);
-      transition: box-shadow 0.3s, transform 0.2s;
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 40px rgba(179,71,255,0.6);
+    /* IMAGE CENTERED */
+    .hero-image {
+      width: 420px;
+      max-width: 90%;
+      border-radius: 15px;
+      margin: 25px auto 0 auto;
+      display: block;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.5);
     }
   </style>
 </head>
+
 <body>
 
+  <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="logo">✦ SPECIAL SPACE</div>
-    <a href="index.html" class="active">🏠&nbsp; Home</a>
-    <a href="dashboard.html">📊&nbsp; Dashboard</a>
-    <a href="profile.html">👤&nbsp; Profile</a>
-    <a href="events.html">🗓️&nbsp; Events</a>
-    <a href="resources.html">📚&nbsp; Resources</a>
-    <a href="help.html">💬&nbsp; Help</a>
-    <div class="spacer"></div>
-    <a href="login.html" class="logout">🚪&nbsp; Logout</a>
+    <a href = "index.html"><button>Home</button></a>
+    <a href = "dashboard.html"><button>Dashboard</button></a>
+    <a href = "profile.html"><button>Profile</button></a>
+    <a href = "events.html"><button>Events</button></a>
+    <a href = "volunteer.html"><button>Volunteer</button></a>
+    <a href = "help.html"><button>Help</button></a>
+    <a href = "success.html"><button>Success Stories</button></a>
+    <a href = "contact.html"><button>Contacts</button></a>
   </div>
 
+  <!-- MAIN CONTENT -->
   <div class="main">
-    <div class="hero">
-      <h1>SPECIAL SPACE</h1>
-      <p>
-        Connecting families, caregivers, and individuals with special needs to local events,
-        community resources, and supportive networks in Whispering Hills.
-      </p>
-      <img class="hero-image" src="./images/space.png" alt="Special Space logo">
 
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🌟</div>
-          <h3>Community</h3>
-          <p>Find and connect with families and caregivers who understand your journey in Whispering Hills.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🗓️</div>
-          <h3>Local Events</h3>
-          <p>Discover inclusive events, workshops, and social gatherings tailored for special needs individuals.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📚</div>
-          <h3>Resources</h3>
-          <p>Access curated tools, guides, and services to support daily life and long-term planning.</p>
-        </div>
-      </div>
+    <h1>Special Space</h1>
 
-      <a href="dashboard.html" class="cta-btn">GO TO DASHBOARD →</a>
+    <div class="description">
+      Special Space connects families, caregivers, and individuals with special needs
+      to local events, community resources, and supportive networks in Whispering Hills.
+      Built for accessibility and inclusion, it helps people find meaningful connections
+      and reliable support.
     </div>
+
+    <!-- FIXED IMAGE PATH -->
+    <img class="hero-image" src="./images/space.png" alt="Special Space logo">
+
   </div>
 
 </body>
