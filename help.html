@@ -1,44 +1,346 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Special Space – Help</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root { --bg:#0d001f; --sidebar-bg:#07000f; --accent:#b347ff; --accent2:#5ef0c8; --card-bg:rgba(255,255,255,0.04); --card-border:rgba(255,255,255,0.08); --text:#e8d5ff; --muted:#8a7aa0; }
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:'Nunito',sans-serif; background-color:var(--bg); color:var(--text); min-height:100vh; background-image:radial-gradient(ellipse at 20% 20%,rgba(100,0,180,.18) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(0,180,150,.1) 0%,transparent 60%); }
-    .sidebar { position:fixed; left:0; top:0; width:220px; height:100%; background-color:var(--sidebar-bg); border-right:1px solid var(--card-border); padding-top:30px; display:flex; flex-direction:column; gap:4px; z-index:100; }
-    .sidebar .logo { font-family:'Orbitron',sans-serif; font-size:13px; letter-spacing:2px; color:var(--accent); text-align:center; padding:0 20px 24px; border-bottom:1px solid var(--card-border); margin-bottom:10px; }
-    .sidebar a { display:flex; align-items:center; gap:10px; width:85%; margin:0 auto; padding:11px 16px; border-radius:10px; color:var(--muted); font-weight:600; font-size:14px; text-decoration:none; transition:all .2s ease; }
-    .sidebar a:hover { background-color:rgba(179,71,255,.12); color:var(--text); }
-    .sidebar a.active { background:linear-gradient(135deg,rgba(179,71,255,.25),rgba(94,240,200,.1)); color:white; border:1px solid rgba(179,71,255,.3); }
-    .sidebar .spacer { flex:1; }
-    .sidebar a.logout { margin-bottom:20px; color:#ff6b6b88; }
-    .sidebar a.logout:hover { background:rgba(255,80,80,.1); color:#ff8888; }
-    .main { margin-left:220px; padding:50px; }
-    h2 { font-family:'Orbitron',sans-serif; font-size:28px; letter-spacing:2px; background:linear-gradient(135deg,#c97bff,#5ef0c8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:10px; }
-    .coming-soon { margin-top:80px; text-align:center; color:var(--muted); font-size:18px; }
-    .coming-soon .icon { font-size:64px; margin-bottom:20px; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Help | Special Space</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  color:#ffffff; /* ALL TEXT WHITE */
+}
+
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#0b1220;
+}
+
+header{
+  padding:22px 18px;
+  background:#111a2e;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+.brand{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.brand h1{margin:0; font-size:22px}
+.brand p{margin:0; font-size:14px; opacity:0.95}
+
+nav{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+nav a{
+  text-decoration:none;
+  background:#0f1730;
+  padding:10px 12px;
+  border-radius:10px;
+  display:inline-block;
+}
+nav a:hover{background:#16204a}
+
+main{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:18px;
+}
+@media (max-width: 900px){
+  main{grid-template-columns:1fr}
+}
+
+.card{
+  background:#111a2e;
+  border-radius:12px;
+  padding:18px;
+}
+
+.small{
+  font-size:14px;
+  opacity:0.95;
+  line-height:1.4;
+}
+
+hr{
+  border:none;
+  border-top:1px solid rgba(255,255,255,0.15);
+  margin:16px 0;
+}
+
+details{
+  background:#0f1730;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:10px;
+}
+
+summary{
+  cursor:pointer;
+  font-weight:700;
+}
+
+input, textarea, select{
+  width:100%;
+  padding:10px;
+  margin-top:6px;
+  margin-bottom:12px;
+  border-radius:8px;
+  border:none;
+  background:#0f1730;
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+button{
+  background:#6ea8ff;
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:pointer;
+}
+button:hover{opacity:0.95}
+
+button.danger{
+  background:#ff6b6b;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#0f1730;
+  font-size:12px;
+  opacity:0.95;
+}
+
+.notice{
+  background:#0f1730;
+  border-radius:10px;
+  padding:12px;
+}
+</style>
 </head>
+
 <body>
-  <div class="sidebar">
-    <div class="logo">✦ SPECIAL SPACE</div>
-    <a href="index.html">🏠&nbsp; Home</a>
-    <a href="dashboard.html">📊&nbsp; Dashboard</a>
-    <a href="profile.html">👤&nbsp; Profile</a>
-    <a href="help.html" class="active">💬&nbsp; Help</a>
-    <a href="help.html">📚&nbsp; Resources</a>
-    <a href="help.html">💬&nbsp; Help</a>
-    <div class="spacer"></div>
-    <a href="login.html" class="logout">🚪&nbsp; Logout</a>
+
+<header>
+  <div class="brand">
+    <h1>Help & Support</h1>
+    <p class="small">FAQs, how-to guides, and a quick contact form for Special Space.</p>
   </div>
-  <div class="main">
-    <h2>HELP</h2>
-    <div class="coming-soon">
-      <div class="icon">💬</div>
-      <p>Help page coming soon!</p>
+
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="volunteer.html">Volunteers</a>
+    <a href="events.html">Events</a>
+    <a href="help.html">Help</a>
+  </nav>
+</header>
+
+<main>
+  <!-- LEFT: FAQ -->
+  <section class="card">
+    <h2 style="margin-top:0;">Frequently Asked Questions</h2>
+    <p class="small">Click a question to expand it.</p>
+
+    <details>
+      <summary>What is Special Space?</summary>
+      <p class="small">
+        Special Space is a prototype website that helps families, caregivers, and people with special needs
+        find community support, local events, and volunteers in one place.
+      </p>
+    </details>
+
+    <details>
+      <summary>Is my information shared with everyone?</summary>
+      <p class="small">
+        In this prototype, your information is saved only in your browser using localStorage. That means other people
+        will not see your data unless you build a backend later.
+      </p>
+    </details>
+
+    <details>
+      <summary>Why do my volunteers/events disappear on another computer?</summary>
+      <p class="small">
+        Because localStorage is stored per browser and per device. If you open the site on a different browser or computer,
+        it will have its own saved data.
+      </p>
+    </details>
+
+    <details>
+      <summary>How do I add myself as a volunteer?</summary>
+      <p class="small">
+        Go to the <strong>Volunteers</strong> page, fill in your info, and press <strong>Add Me</strong>.
+        Your name will show up in the list on that page.
+      </p>
+    </details>
+
+    <details>
+      <summary>How do I add an event?</summary>
+      <p class="small">
+        Go to the <strong>Events</strong> page, add an event title and date, then press <strong>Add Event</strong>.
+        It will show in the event list.
+      </p>
+    </details>
+
+    <details>
+      <summary>How do I fix it if something looks broken?</summary>
+      <p class="small">
+        Try refreshing the page. If you changed code, make sure the file name matches the link in the navigation.
+        If you deployed on GitHub Pages, confirm you pushed the newest version.
+      </p>
+    </details>
+
+    <hr />
+
+    <div class="notice">
+      <p class="small" style="margin:0;">
+        <strong>Prototype note:</strong> This site is currently front-end only. If you want a real shared system,
+        you’ll need a backend (Firebase, Supabase, or a simple Node server).
+      </p>
     </div>
-  </div>
+
+    <div style="margin-top:12px;">
+      <span class="badge">White text theme</span>
+      <span class="badge">Dark background</span>
+      <span class="badge">Works on GitHub Pages</span>
+    </div>
+  </section>
+
+  <!-- RIGHT: Contact / Report -->
+  <section class="card">
+    <h2 style="margin-top:0;">Contact / Report a Problem</h2>
+    <p class="small">
+      Fill this out to generate a message you can copy and send to the site admin.
+      (This prototype can’t send emails automatically yet.)
+    </p>
+
+    <form id="helpForm">
+      <label class="small">Your Name *</label>
+      <input id="hName" type="text" required placeholder="Your name" />
+
+      <label class="small">Email</label>
+      <input id="hEmail" type="email" placeholder="you@email.com" />
+
+      <label class="small">Issue Type *</label>
+      <select id="hType" required>
+        <option value="">Select one</option>
+        <option>Bug / Something is broken</option>
+        <option>Question / How do I...</option>
+        <option>Suggestion / Feature request</option>
+        <option>Safety concern</option>
+        <option>Other</option>
+      </select>
+
+      <label class="small">What happened? *</label>
+      <textarea id="hMessage" required placeholder="Describe the issue or question..."></textarea>
+
+      <div class="row">
+        <button type="submit">Generate Message</button>
+        <button type="button" class="danger" onclick="clearHelp()">Clear</button>
+      </div>
+    </form>
+
+    <hr />
+
+    <h3 style="margin:0 0 8px;">Generated Message</h3>
+    <div id="output" class="notice small">Nothing generated yet.</div>
+
+    <div class="row" style="margin-top:12px;">
+      <button type="button" onclick="copyMessage()">Copy</button>
+      <button type="button" class="danger" onclick="clearGenerated()">Clear Generated</button>
+    </div>
+  </section>
+</main>
+
+<script>
+function escapeHtml(str){
+  return String(str || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+const out = document.getElementById("output");
+
+document.getElementById("helpForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("hName").value.trim();
+  const email = document.getElementById("hEmail").value.trim();
+  const type = document.getElementById("hType").value;
+  const msg = document.getElementById("hMessage").value.trim();
+
+  if(!name || !type || !msg){
+    alert("Please fill out the required fields.");
+    return;
+  }
+
+  const generated =
+`Special Space Help Request
+
+Name: ${name}
+Email: ${email || "Not provided"}
+Issue Type: ${type}
+
+Message:
+${msg}
+
+Page: ${window.location.href}
+Browser: ${navigator.userAgent}
+Time: ${new Date().toLocaleString()}
+`;
+
+  out.textContent = generated;
+});
+
+function clearHelp(){
+  document.getElementById("helpForm").reset();
+}
+
+function clearGenerated(){
+  out.textContent = "Nothing generated yet.";
+}
+
+async function copyMessage(){
+  const text = out.textContent;
+  if(!text || text === "Nothing generated yet."){
+    alert("Generate a message first.");
+    return;
+  }
+  try{
+    await navigator.clipboard.writeText(text);
+    alert("Copied!");
+  }catch{
+    alert("Copy failed. You can manually select and copy the text.");
+  }
+}
+</script>
+
 </body>
 </html>

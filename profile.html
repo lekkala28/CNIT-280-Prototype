@@ -1,400 +1,267 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Special Space – Profile</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #0d001f;
-      --sidebar-bg: #07000f;
-      --accent: #b347ff;
-      --accent2: #5ef0c8;
-      --card-bg: rgba(255,255,255,0.04);
-      --card-border: rgba(255,255,255,0.08);
-      --text: #e8d5ff;
-      --muted: #8a7aa0;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Profile | Special Space</title>
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<style>
+*{
+  box-sizing:border-box;
+  color:#ffffff; /* ALL TEXT WHITE */
+}
 
-    body {
-      font-family: 'Nunito', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      background-image:
-        radial-gradient(ellipse at 20% 20%, rgba(100, 0, 180, 0.18) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 80%, rgba(0, 180, 150, 0.1) 0%, transparent 60%);
-    }
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#0b1220;
+}
 
-    .sidebar {
-      position: fixed;
-      left: 0; top: 0;
-      width: 220px;
-      height: 100%;
-      background-color: var(--sidebar-bg);
-      border-right: 1px solid var(--card-border);
-      padding-top: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      z-index: 100;
-    }
+header{
+  padding:25px;
+  text-align:center;
+  background:#111a2e;
+}
 
-    .sidebar .logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 13px;
-      letter-spacing: 2px;
-      color: var(--accent);
-      text-align: center;
-      padding: 0 20px 24px 20px;
-      border-bottom: 1px solid var(--card-border);
-      margin-bottom: 10px;
-    }
+main{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+}
 
-    .sidebar a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 85%;
-      margin: 0 auto;
-      padding: 11px 16px;
-      border-radius: 10px;
-      color: var(--muted);
-      font-weight: 600;
-      font-size: 14px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
+.card{
+  background:#111a2e;
+  border-radius:12px;
+  padding:20px;
+  flex:1;
+  min-width:320px;
+}
 
-    .sidebar a:hover { background-color: rgba(179,71,255,0.12); color: var(--text); }
-    .sidebar a.active {
-      background: linear-gradient(135deg, rgba(179,71,255,0.25), rgba(94,240,200,0.1));
-      color: white;
-      border: 1px solid rgba(179,71,255,0.3);
-    }
-    .sidebar .spacer { flex: 1; }
-    .sidebar a.logout { margin-bottom: 20px; color: #ff6b6b88; }
-    .sidebar a.logout:hover { background: rgba(255,80,80,0.1); color: #ff8888; }
+input, select, textarea{
+  width:100%;
+  padding:10px;
+  margin-top:6px;
+  margin-bottom:12px;
+  border-radius:8px;
+  border:none;
+  background:#0f1730;
+}
 
-    .main {
-      margin-left: 220px;
-      padding: 50px 50px;
-      max-width: 900px;
-    }
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
 
-    .page-header {
-      margin-bottom: 36px;
-    }
+button{
+  background:#6ea8ff;
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:pointer;
+}
 
-    .page-header h2 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 28px;
-      letter-spacing: 2px;
-      background: linear-gradient(135deg, #c97bff, #5ef0c8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+button.danger{
+  background:#ff6b6b;
+}
 
-    .page-header p { color: var(--muted); margin-top: 6px; font-size: 15px; }
+.small{
+  font-size:14px;
+  opacity:0.95;
+}
 
-    /* PROFILE HERO */
-    .profile-hero {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 36px;
-      display: flex;
-      align-items: center;
-      gap: 30px;
-      margin-bottom: 28px;
-    }
+.profileBox{
+  background:#0f1730;
+  padding:14px;
+  border-radius:10px;
+}
 
-    .avatar {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), #6a0dad);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 38px;
-      flex-shrink: 0;
-      box-shadow: 0 0 30px rgba(179,71,255,0.4);
-    }
+.row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
 
-    .profile-info h3 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
+.row > div{
+  flex:1;
+  min-width:200px;
+}
 
-    .profile-info .role-badge {
-      display: inline-block;
-      background: rgba(94,240,200,0.15);
-      border: 1px solid rgba(94,240,200,0.3);
-      color: var(--accent2);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-    }
-
-    .profile-info p { color: var(--muted); font-size: 14px; }
-
-    .edit-btn {
-      margin-left: auto;
-      padding: 10px 22px;
-      background: transparent;
-      border: 1px solid rgba(179,71,255,0.4);
-      color: var(--accent);
-      font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      font-size: 13px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .edit-btn:hover {
-      background: rgba(179,71,255,0.15);
-    }
-
-    /* FORM SECTIONS */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 28px;
-      margin-bottom: 24px;
-    }
-
-    .card h3 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 13px;
-      letter-spacing: 1.5px;
-      color: var(--accent);
-      margin-bottom: 22px;
-      text-transform: uppercase;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-
-    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .form-group.full { grid-column: 1 / -1; }
-
-    .form-group label {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--muted);
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 12px 14px;
-      color: var(--text);
-      font-family: 'Nunito', sans-serif;
-      font-size: 14px;
-      transition: border-color 0.2s;
-      outline: none;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: rgba(179,71,255,0.5);
-    }
-
-    .form-group select option { background: #1a003a; }
-    .form-group textarea { resize: vertical; min-height: 80px; }
-
-    /* TAGS / INTERESTS */
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 4px;
-    }
-
-    .tag {
-      background: rgba(179,71,255,0.15);
-      border: 1px solid rgba(179,71,255,0.3);
-      color: var(--text);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .tag.selected {
-      background: rgba(94,240,200,0.2);
-      border-color: rgba(94,240,200,0.5);
-      color: var(--accent2);
-    }
-
-    .tag:hover { opacity: 0.8; }
-
-    /* SAVE BUTTON */
-    .save-btn {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--accent), #6a0dad);
-      color: white;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 13px;
-      letter-spacing: 2px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 700;
-      box-shadow: 0 4px 20px rgba(179,71,255,0.3);
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-
-    .save-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(179,71,255,0.5);
-    }
-  </style>
+hr{
+  border:none;
+  border-top:1px solid rgba(255,255,255,0.15);
+  margin:16px 0;
+}
+</style>
 </head>
+
 <body>
+<header>
+  <h1>My Profile</h1>
+  <p class="small">Create your profile so families and volunteers can connect.</p>
+</header>
 
-  <div class="sidebar">
-    <div class="logo">✦ SPECIAL SPACE</div>
-    <a href="index.html">🏠&nbsp; Home</a>
-    <a href="dashboard.html">📊&nbsp; Dashboard</a>
-    <a href="profile.html" class="active">👤&nbsp; Profile</a>
-    <a href="events.html">🗓️&nbsp; Events</a>
-    <a href="resources.html">📚&nbsp; Resources</a>
-    <a href="help.html">💬&nbsp; Help</a>
-    <div class="spacer"></div>
-    <a href="login.html" class="logout">🚪&nbsp; Logout</a>
-  </div>
+<main>
+  <!-- LEFT: Current profile display -->
+  <section class="card">
+    <h2>Current Profile</h2>
+    <div id="profileDisplay" class="profileBox"></div>
+    <hr />
+    <button class="danger" type="button" onclick="clearProfile()">Clear Profile</button>
+  </section>
 
-  <div class="main">
+  <!-- RIGHT: Edit profile -->
+  <section class="card">
+    <h2>Create / Update Profile</h2>
 
-    <div class="page-header">
-      <h2>PROFILE</h2>
-      <p>Manage your account and community preferences.</p>
-    </div>
+    <form id="profileForm">
+      <label>Full Name *</label>
+      <input id="fullName" type="text" required placeholder="e.g., Alex Johnson" />
 
-    <div class="profile-hero">
-      <div class="avatar">🌟</div>
-      <div class="profile-info">
-        <div class="role-badge">Caregiver</div>
-        <h3>Jamie Rivera</h3>
-        <p>Member since January 2025 · Whispering Hills</p>
+      <div class="row">
+        <div>
+          <label>Email</label>
+          <input id="email" type="email" placeholder="alex@email.com" />
+        </div>
+        <div>
+          <label>Phone</label>
+          <input id="phone" type="tel" placeholder="(555) 555-5555" />
+        </div>
       </div>
-      <button class="edit-btn">Edit Avatar</button>
-    </div>
 
-    <div class="card">
-      <h3>Personal Information</h3>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>First Name</label>
-          <input type="text" value="Jamie">
-        </div>
-        <div class="form-group">
-          <label>Last Name</label>
-          <input type="text" value="Rivera">
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" value="jamie@email.com">
-        </div>
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" value="(555) 012-3456">
-        </div>
-        <div class="form-group">
-          <label>Zip Code</label>
-          <input type="text" value="62701">
-        </div>
-        <div class="form-group">
-          <label>I am a...</label>
-          <select>
-            <option selected>Caregiver / Parent</option>
-            <option>Individual with Special Needs</option>
-            <option>Educator / Therapist</option>
-            <option>Community Volunteer</option>
+      <div class="row">
+        <div>
+          <label>I am a *</label>
+          <select id="userType" required>
+            <option value="">Select one</option>
+            <option>Parent / Family Member</option>
+            <option>Caregiver</option>
+            <option>Person with Special Needs</option>
+            <option>Volunteer</option>
+            <option>Other</option>
           </select>
         </div>
-        <div class="form-group full">
-          <label>About Me</label>
-          <textarea>Parent of two kids, including a 10-year-old with autism. Looking for social events and therapy resources in the Whispering Hills area.</textarea>
+        <div>
+          <label>City / Area</label>
+          <input id="location" type="text" placeholder="Whispering Hills" />
         </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3>Community Interests</h3>
-      <p style="font-size:14px; color:var(--muted); margin-bottom:16px;">Select topics to personalize your event and resource recommendations.</p>
-      <div class="tags" id="tagContainer">
-        <span class="tag selected" onclick="this.classList.toggle('selected')">Autism Support</span>
-        <span class="tag selected" onclick="this.classList.toggle('selected')">Sensory Activities</span>
-        <span class="tag" onclick="this.classList.toggle('selected')">Physical Therapy</span>
-        <span class="tag selected" onclick="this.classList.toggle('selected')">Social Skills</span>
-        <span class="tag" onclick="this.classList.toggle('selected')">IEP / School Support</span>
-        <span class="tag" onclick="this.classList.toggle('selected')">Speech Therapy</span>
-        <span class="tag" onclick="this.classList.toggle('selected')">Adaptive Sports</span>
-        <span class="tag selected" onclick="this.classList.toggle('selected')">Parent Groups</span>
-        <span class="tag" onclick="this.classList.toggle('selected')">Mental Health</span>
-        <span class="tag" onclick="this.classList.toggle('selected')">Respite Care</span>
-        <span class="tag" onclick="this.classList.toggle('selected')">Financial Assistance</span>
-        <span class="tag" onclick="this.classList.toggle('selected')">Inclusive Arts</span>
-      </div>
-    </div>
+      <label>Support Needed (or Support You Can Offer)</label>
+      <textarea id="support" placeholder="e.g., looking for weekend activities, respite care, tutoring, event help..."></textarea>
 
-    <div class="card">
-      <h3>Notification Preferences</h3>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Event Reminders</label>
-          <select>
-            <option>Email &amp; SMS</option>
-            <option>Email Only</option>
-            <option>SMS Only</option>
-            <option>None</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>New Resource Alerts</label>
-          <select>
-            <option>Weekly Digest</option>
-            <option>Instant</option>
-            <option>None</option>
-          </select>
-        </div>
-      </div>
-    </div>
+      <label>Bio</label>
+      <textarea id="bio" placeholder="Write a short intro about yourself..."></textarea>
 
-    <button class="save-btn" onclick="alert('Profile saved!')">SAVE CHANGES</button>
+      <label>Preferred Contact Method</label>
+      <select id="contactMethod">
+        <option>Email</option>
+        <option>Phone</option>
+        <option>No preference</option>
+      </select>
 
-  </div>
+      <button type="submit">Save Profile</button>
+    </form>
+  </section>
+</main>
+
+<script>
+const PROFILE_KEY = "special_space_profile_v1";
+
+function loadProfile(){
+  try{
+    const raw = localStorage.getItem(PROFILE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch{
+    return null;
+  }
+}
+
+function saveProfile(profile){
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+}
+
+function renderProfile(){
+  const box = document.getElementById("profileDisplay");
+  const p = loadProfile();
+
+  if(!p){
+    box.innerHTML = "<p class='small'>No profile saved yet. Use the form to create one.</p>";
+    return;
+  }
+
+  box.innerHTML = `
+    <h3 style="margin-top:0;">${escapeHtml(p.fullName)}</h3>
+    <p class="small"><strong>Type:</strong> ${escapeHtml(p.userType)}</p>
+    <p class="small"><strong>Location:</strong> ${escapeHtml(p.location || "Not provided")}</p>
+    <p class="small"><strong>Contact:</strong> ${escapeHtml(p.contactMethod || "Email")}</p>
+    <p class="small"><strong>Email:</strong> ${escapeHtml(p.email || "Not provided")}</p>
+    <p class="small"><strong>Phone:</strong> ${escapeHtml(p.phone || "Not provided")}</p>
+    <p class="small"><strong>Support:</strong> ${escapeHtml(p.support || "Not provided")}</p>
+    <p class="small"><strong>Bio:</strong> ${escapeHtml(p.bio || "Not provided")}</p>
+    <p class="small"><em>Last updated:</em> ${new Date(p.updatedAt).toLocaleString()}</p>
+  `;
+}
+
+function clearProfile(){
+  if(confirm("Clear your saved profile?")){
+    localStorage.removeItem(PROFILE_KEY);
+    document.getElementById("profileForm").reset();
+    renderProfile();
+  }
+}
+
+function escapeHtml(str){
+  return String(str || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+document.getElementById("profileForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const profile = {
+    fullName: document.getElementById("fullName").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    userType: document.getElementById("userType").value,
+    location: document.getElementById("location").value.trim(),
+    support: document.getElementById("support").value.trim(),
+    bio: document.getElementById("bio").value.trim(),
+    contactMethod: document.getElementById("contactMethod").value,
+    updatedAt: Date.now()
+  };
+
+  if(!profile.fullName || !profile.userType){
+    return;
+  }
+
+  saveProfile(profile);
+  renderProfile();
+  alert("Profile saved!");
+});
+
+// Prefill form if profile exists
+(function init(){
+  const p = loadProfile();
+  if(p){
+    document.getElementById("fullName").value = p.fullName || "";
+    document.getElementById("email").value = p.email || "";
+    document.getElementById("phone").value = p.phone || "";
+    document.getElementById("userType").value = p.userType || "";
+    document.getElementById("location").value = p.location || "";
+    document.getElementById("support").value = p.support || "";
+    document.getElementById("bio").value = p.bio || "";
+    document.getElementById("contactMethod").value = p.contactMethod || "Email";
+  }
+  renderProfile();
+})();
+</script>
+
 </body>
 </html>

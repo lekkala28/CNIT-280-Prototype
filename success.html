@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Success Stories | Special Space</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a0033;
+      color: white;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100%;
+      background-color: black;
+      padding-top: 30px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+    }
+
+    .sidebar button {
+      display: block;
+      width: 80%;
+      margin: 15px auto;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .sidebar button:hover {
+      background-color: #d9d9d9;
+    }
+
+    .main {
+      margin-left: 220px;
+      padding: 40px;
+      max-width: 900px;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 42px;
+      letter-spacing: 3px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .story {
+      background: #2a0055;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .story h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      font-size: 14px;
+      opacity: 0.95;
+      margin-top: 10px;
+    }
+
+    .form-box {
+      background: #2a0055;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      margin-bottom: 14px;
+      border-radius: 8px;
+      border: none;
+      background: #140026;
+      color: white;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      background: white;
+      color: black;
+      font-weight: bold;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover {
+      background: #d9d9d9;
+    }
+
+    .delete-btn {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .clear-btn {
+      background: #ff4d4d;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .clear-btn:hover {
+      opacity: 0.95;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar">
+    <a href="index.html"><button>Home</button></a>
+    <a href="dashboard.html"><button>Dashboard</button></a>
+    <a href="profile.html"><button>Profile</button></a>
+    <a href="events.html"><button>Events</button></a>
+    <a href="volunteer.html"><button>Volunteer</button></a>
+    <a href="success-stories.html"><button>Success Stories</button></a>
+    <a href="help.html"><button>Help</button></a>
+    <button onclick="alert('Logout')">Logout</button>
+  </div>
+
+  <div class="main">
+
+    <h1>Success Stories</h1>
+
+    <div class="intro">
+      These stories highlight real moments of support, inclusion, and connection.
+      You can read stories from the community and add your own too.
+    </div>
+
+    <div id="storiesList"></div>
+
+    <button class="clear-btn" onclick="resetToDefaultStories()">Reset to Default Stories</button>
+
+    <div class="form-box">
+      <h2>Share Your Story</h2>
+
+      <form id="storyForm">
+        <label>Your Name *</label>
+        <input type="text" id="name" required>
+
+        <label>Title *</label>
+        <input type="text" id="title" required>
+
+        <label>Your Story *</label>
+        <textarea id="storyText" required></textarea>
+
+        <button class="submit-btn" type="submit">Add Story</button>
+      </form>
+    </div>
+
+  </div>
+
+<script>
+const KEY = "special_space_success_stories_v1";
+
+/* Default stories always exist */
+const defaultStories = [
+  {
+    name: "Ava R.",
+    title: "A real community for the first time",
+    text: "After moving to Whispering Hills, we felt isolated. Through Special Space, we found a sensory-friendly event and met other families going through the same thing. Now we have people we can call when we need support."
+  },
+  {
+    name: "Marcus T.",
+    title: "A volunteer helped us feel safe at events",
+    text: "My brother has special needs and crowds can be overwhelming. We connected with a volunteer who helped us plan ahead and find quieter spaces. It made going out feel possible again."
+  },
+  {
+    name: "Lina K.",
+    title: "Small resources made a big difference",
+    text: "We found a list of local support groups and a caregiver meetup. It was the first time I felt like I was not handling everything alone. Even one conversation helped my mental health a lot."
+  }
+];
+
+function loadStories() {
+  const raw = localStorage.getItem(KEY);
+  if (!raw) {
+    localStorage.setItem(KEY, JSON.stringify(defaultStories));
+    return [...defaultStories];
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      localStorage.setItem(KEY, JSON.stringify(defaultStories));
+      return [...defaultStories];
+    }
+    return parsed;
+  } catch {
+    localStorage.setItem(KEY, JSON.stringify(defaultStories));
+    return [...defaultStories];
+  }
+}
+
+let stories = loadStories();
+
+function saveStories() {
+  localStorage.setItem(KEY, JSON.stringify(stories));
+}
+
+function escapeHtml(str){
+  return String(str || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function renderStories() {
+  const list = document.getElementById("storiesList");
+  list.innerHTML = "";
+
+  stories.forEach((s, index) => {
+    const div = document.createElement("div");
+    div.className = "story";
+
+    div.innerHTML = `
+      <h3>${escapeHtml(s.title)}</h3>
+      <p>${escapeHtml(s.text)}</p>
+      <div class="meta"><strong>- ${escapeHtml(s.name)}</strong></div>
+      <button class="delete-btn" onclick="deleteStory(${index})">Delete</button>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+function deleteStory(i) {
+  stories.splice(i, 1);s
+  saveStories();
+  renderStories();
+}
+
+document.getElementById("storyForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const newStory = {
+    name: document.getElementById("name").value.trim(),
+    title: document.getElementById("title").value.trim(),
+    text: document.getElementById("storyText").value.trim()
+  };
+
+  if(!newStory.name || !newStory.title || !newStory.text){
+    return;
+  }
+
+  stories.unshift(newStory); // put new story on top
+  saveStories();
+  renderStories();
+  this.reset();
+});
+
+function resetToDefaultStories(){
+  if(confirm("Reset stories to the default examples? This removes your added stories.")){
+    stories = [...defaultStories];
+    saveStories();
+    renderStories();
+  }
+}
+
+renderStories();
+</script>
+
+</body>
+</html>

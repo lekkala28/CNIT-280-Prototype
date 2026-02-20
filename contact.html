@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Contact & Support | Special Space</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a0033;
+      color: white;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100%;
+      background-color: black;
+      padding-top: 30px;
+    }
+
+    .sidebar a { text-decoration: none; }
+
+    .sidebar button {
+      display: block;
+      width: 80%;
+      margin: 15px auto;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .sidebar button:hover { background-color: #d9d9d9; }
+
+    /* MAIN */
+    .main {
+      margin-left: 220px;
+      padding: 40px;
+      max-width: 950px;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 42px;
+      text-align: center;
+      margin-bottom: 10px;
+      letter-spacing: 3px;
+    }
+
+    .intro {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-size: 26px;
+      margin-top: 40px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #ffffff44;
+      padding-bottom: 6px;
+    }
+
+    .card {
+      background: #2a0055;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .card h3 {
+      margin-top: 0;
+    }
+
+    .info {
+      font-size: 16px;
+      margin: 6px 0;
+    }
+
+    .call-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: white;
+      color: black;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .call-btn:hover {
+      background: #d9d9d9;
+    }
+
+    .urgent {
+      background: #660000;
+      border-left: 5px solid red;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <a href="index.html"><button>Home</button></a>
+    <a href="dashboard.html"><button>Dashboard</button></a>
+    <a href="profile.html"><button>Profile</button></a>
+    <a href="events.html"><button>Events</button></a>
+    <a href="volunteer.html"><button>Volunteer</button></a>
+    <a href="success-stories.html"><button>Success Stories</button></a>
+    <a href="help.html"><button>Help</button></a>
+    <a href="contact.html"><button>Contact</button></a>
+    <button onclick="alert('Logout')">Logout</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <h1>Contact & Support</h1>
+
+    <div class="intro">
+      If you or your loved one needs help, these organizations and contacts
+      are available for support, guidance, and assistance.
+    </div>
+
+    <!-- EMERGENCY -->
+    <div class="section-title">Emergency Support</div>
+
+    <div class="card urgent">
+      <h3>Emergency Services</h3>
+      <div class="info">For immediate danger or medical emergency</div>
+      <a class="call-btn" href="tel:911">Call 911</a>
+    </div>
+
+    <div class="card urgent">
+      <h3>988 Suicide & Crisis Lifeline</h3>
+      <div class="info">24/7 confidential support</div>
+      <a class="call-btn" href="tel:988">Call 988</a>
+    </div>
+
+    <!-- LOCAL SUPPORT -->
+    <div class="section-title">Local Community Support</div>
+
+    <div class="card">
+      <h3>Whispering Hills Family Resource Center</h3>
+      <div class="info">Support programs, counseling, parent workshops</div>
+      <div class="info">Phone: (555) 123-4567</div>
+      <a class="call-btn" href="tel:5551234567">Call</a>
+    </div>
+
+    <div class="card">
+      <h3>Special Needs Advocacy Group</h3>
+      <div class="info">Education plans, legal guidance, school advocacy</div>
+      <div class="info">Phone: (555) 987-6543</div>
+      <a class="call-btn" href="tel:5559876543">Call</a>
+    </div>
+
+    <!-- CAREGIVER SUPPORT -->
+    <div class="section-title">Caregiver & Family Support</div>
+
+    <div class="card">
+      <h3>Caregiver Support Hotline</h3>
+      <div class="info">Advice, emotional support, burnout prevention</div>
+      <div class="info">Phone: (555) 222-3333</div>
+      <a class="call-btn" href="tel:5552223333">Call</a>
+    </div>
+
+    <div class="card">
+      <h3>Respite Care Coordination</h3>
+      <div class="info">Short-term care services and scheduling help</div>
+      <div class="info">Phone: (555) 444-8888</div>
+      <a class="call-btn" href="tel:5554448888">Call</a>
+    </div>
+
+    <!-- VOLUNTEER CONTACT -->
+    <div class="section-title">Volunteer Assistance</div>
+
+    <div class="card">
+      <h3>Special Space Volunteer Coordinator</h3>
+      <div class="info">Help with events, transportation, companionship</div>
+      <div class="info">Email: volunteers@specialspace.org</div>
+      <a class="call-btn" href="mailto:volunteers@specialspace.org">Email</a>
+    </div>
+
+  </div>
+
+</body>
+</html>

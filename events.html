@@ -1,44 +1,369 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Special Space – Events</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root { --bg:#0d001f; --sidebar-bg:#07000f; --accent:#b347ff; --accent2:#5ef0c8; --card-bg:rgba(255,255,255,0.04); --card-border:rgba(255,255,255,0.08); --text:#e8d5ff; --muted:#8a7aa0; }
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:'Nunito',sans-serif; background-color:var(--bg); color:var(--text); min-height:100vh; background-image:radial-gradient(ellipse at 20% 20%,rgba(100,0,180,.18) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(0,180,150,.1) 0%,transparent 60%); }
-    .sidebar { position:fixed; left:0; top:0; width:220px; height:100%; background-color:var(--sidebar-bg); border-right:1px solid var(--card-border); padding-top:30px; display:flex; flex-direction:column; gap:4px; z-index:100; }
-    .sidebar .logo { font-family:'Orbitron',sans-serif; font-size:13px; letter-spacing:2px; color:var(--accent); text-align:center; padding:0 20px 24px; border-bottom:1px solid var(--card-border); margin-bottom:10px; }
-    .sidebar a { display:flex; align-items:center; gap:10px; width:85%; margin:0 auto; padding:11px 16px; border-radius:10px; color:var(--muted); font-weight:600; font-size:14px; text-decoration:none; transition:all .2s ease; }
-    .sidebar a:hover { background-color:rgba(179,71,255,.12); color:var(--text); }
-    .sidebar a.active { background:linear-gradient(135deg,rgba(179,71,255,.25),rgba(94,240,200,.1)); color:white; border:1px solid rgba(179,71,255,.3); }
-    .sidebar .spacer { flex:1; }
-    .sidebar a.logout { margin-bottom:20px; color:#ff6b6b88; }
-    .sidebar a.logout:hover { background:rgba(255,80,80,.1); color:#ff8888; }
-    .main { margin-left:220px; padding:50px; }
-    h2 { font-family:'Orbitron',sans-serif; font-size:28px; letter-spacing:2px; background:linear-gradient(135deg,#c97bff,#5ef0c8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:10px; }
-    .coming-soon { margin-top:80px; text-align:center; color:var(--muted); font-size:18px; }
-    .coming-soon .icon { font-size:64px; margin-bottom:20px; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Events | Special Space</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  color:#ffffff; /* ALL TEXT WHITE */
+}
+
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#0b1220;
+}
+
+header{
+  padding:22px 18px;
+  background:#111a2e;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+.brand{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.brand h1{margin:0; font-size:22px}
+.brand p{margin:0; font-size:14px; opacity:0.95}
+
+nav{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+nav a{
+  text-decoration:none;
+  background:#0f1730;
+  padding:10px 12px;
+  border-radius:10px;
+  display:inline-block;
+}
+nav a:hover{background:#16204a}
+
+main{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:18px;
+}
+@media (max-width: 900px){
+  main{grid-template-columns:1fr}
+}
+
+.card{
+  background:#111a2e;
+  border-radius:12px;
+  padding:18px;
+}
+
+.small{
+  font-size:14px;
+  opacity:0.95;
+  line-height:1.35;
+}
+
+input, textarea, select{
+  width:100%;
+  padding:10px;
+  margin-top:6px;
+  margin-bottom:12px;
+  border-radius:8px;
+  border:none;
+  background:#0f1730;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+button{
+  background:#6ea8ff;
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:pointer;
+}
+button:hover{opacity:0.95}
+
+button.danger{
+  background:#ff6b6b;
+}
+
+button.ghost{
+  background:#0f1730;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.listItem{
+  background:#0f1730;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:10px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#0f1730;
+  font-size:12px;
+  opacity:0.95;
+}
+</style>
 </head>
+
 <body>
-  <div class="sidebar">
-    <div class="logo">✦ SPECIAL SPACE</div>
-    <a href="index.html">🏠&nbsp; Home</a>
-    <a href="dashboard.html">📊&nbsp; Dashboard</a>
-    <a href="profile.html">👤&nbsp; Profile</a>
-    <a href="events.html" class="active">🗓️&nbsp; Events</a>
-    <a href="resources.html">📚&nbsp; Resources</a>
-    <a href="help.html">💬&nbsp; Help</a>
-    <div class="spacer"></div>
-    <a href="login.html" class="logout">🚪&nbsp; Logout</a>
+
+<header>
+  <div class="brand">
+    <h1>Events</h1>
+    <p class="small">Browse events and add new ones for the community.</p>
   </div>
-  <div class="main">
-    <h2>EVENTS</h2>
-    <div class="coming-soon">
-      <div class="icon">🗓️</div>
-      <p>Events page coming soon!</p>
+
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="volunteer.html">Volunteers</a>
+    <a href="events.html">Events</a>
+  </nav>
+</header>
+
+<main>
+  <!-- LEFT: Add Event -->
+  <section class="card">
+    <h2 style="margin-top:0;">Add an Event</h2>
+    <p class="small">Events are saved to your browser (localStorage). Great for a prototype.</p>
+
+    <label class="small">Event Title *</label>
+    <input id="eventTitle" type="text" placeholder="Example: Sensory-friendly movie night" />
+
+    <label class="small">Date *</label>
+    <input id="eventDate" type="date" />
+
+    <label class="small">Time</label>
+    <input id="eventTime" type="time" />
+
+    <label class="small">Location</label>
+    <input id="eventLocation" type="text" placeholder="Example: Whispering Hills Community Center" />
+
+    <label class="small">Category</label>
+    <select id="eventCategory">
+      <option value="General">General</option>
+      <option value="Family">Family</option>
+      <option value="Support Group">Support Group</option>
+      <option value="Recreation">Recreation</option>
+      <option value="Education">Education</option>
+      <option value="Volunteer">Volunteer</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label class="small">Details</label>
+    <textarea id="eventDetails" placeholder="Who is it for? Any accommodations? What to bring?"></textarea>
+
+    <div class="row">
+      <button type="button" onclick="addEvent()">Add Event</button>
+      <button type="button" class="danger" onclick="clearAllEvents()">Clear All</button>
     </div>
-  </div>
+
+    <div style="margin-top:12px;">
+      <span class="badge">No account needed</span>
+      <span class="badge">Works on GitHub Pages</span>
+    </div>
+  </section>
+
+  <!-- RIGHT: Event List -->
+  <section class="card">
+    <h2 style="margin-top:0;">Event List</h2>
+
+    <label class="small">Search events</label>
+    <input id="searchBox" type="text" placeholder="Search by title, location, or category..." />
+
+    <label class="small">Filter by category</label>
+    <select id="categoryFilter">
+      <option value="all">All categories</option>
+      <option value="General">General</option>
+      <option value="Family">Family</option>
+      <option value="Support Group">Support Group</option>
+      <option value="Recreation">Recreation</option>
+      <option value="Education">Education</option>
+      <option value="Volunteer">Volunteer</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <div id="eventsList"></div>
+    <div id="eventsEmpty" class="small" style="display:none;">No events found. Add one on the left.</div>
+  </section>
+</main>
+
+<script>
+const EVENTS_KEY = "special_space_events_v1";
+
+function loadEvents(){
+  try{
+    const raw = localStorage.getItem(EVENTS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  }catch{
+    return [];
+  }
+}
+
+function saveEvents(events){
+  localStorage.setItem(EVENTS_KEY, JSON.stringify(events));
+}
+
+function escapeHtml(str){
+  return String(str || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function normalize(s){
+  return String(s || "").toLowerCase().trim();
+}
+
+let events = loadEvents();
+
+function addEvent(){
+  const title = document.getElementById("eventTitle").value.trim();
+  const date = document.getElementById("eventDate").value;
+  const time = document.getElementById("eventTime").value;
+  const location = document.getElementById("eventLocation").value.trim();
+  const category = document.getElementById("eventCategory").value;
+  const details = document.getElementById("eventDetails").value.trim();
+
+  if(!title || !date){
+    alert("Please enter an event title and date.");
+    return;
+  }
+
+  const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now());
+
+  events.push({
+    id,
+    title,
+    date,
+    time,
+    location,
+    category,
+    details,
+    createdAt: Date.now()
+  });
+
+  saveEvents(events);
+
+  document.getElementById("eventTitle").value = "";
+  document.getElementById("eventDate").value = "";
+  document.getElementById("eventTime").value = "";
+  document.getElementById("eventLocation").value = "";
+  document.getElementById("eventCategory").value = "General";
+  document.getElementById("eventDetails").value = "";
+
+  renderEvents();
+}
+
+function deleteEvent(id){
+  events = events.filter(e => e.id !== id);
+  saveEvents(events);
+  renderEvents();
+}
+
+function clearAllEvents(){
+  if(confirm("Clear all events?")){
+    events = [];
+    saveEvents(events);
+    renderEvents();
+  }
+}
+
+function getFilteredEvents(){
+  const q = normalize(document.getElementById("searchBox").value);
+  const cat = document.getElementById("categoryFilter").value;
+
+  let filtered = events.filter(e => {
+    const hay = normalize([e.title, e.location, e.category, e.details].join(" "));
+    const matchesSearch = q ? hay.includes(q) : true;
+    const matchesCat = (cat === "all") ? true : e.category === cat;
+    return matchesSearch && matchesCat;
+  });
+
+  // Sort by date then time
+  filtered.sort((a,b) => {
+    const ad = a.date || "";
+    const bd = b.date || "";
+    if(ad !== bd) return ad.localeCompare(bd);
+    return (a.time || "").localeCompare(b.time || "");
+  });
+
+  return filtered;
+}
+
+function renderEvents(){
+  const listEl = document.getElementById("eventsList");
+  const emptyEl = document.getElementById("eventsEmpty");
+  const shown = getFilteredEvents();
+
+  listEl.innerHTML = "";
+
+  if(!shown.length){
+    emptyEl.style.display = "block";
+    return;
+  }
+  emptyEl.style.display = "none";
+
+  shown.forEach(e => {
+    const div = document.createElement("div");
+    div.className = "listItem";
+
+    const when = `${escapeHtml(e.date)}${e.time ? " • " + escapeHtml(e.time) : ""}`;
+    const where = e.location ? " • " + escapeHtml(e.location) : "";
+    const cat = e.category ? escapeHtml(e.category) : "General";
+
+    div.innerHTML = `
+      <div>
+        <strong>${escapeHtml(e.title)}</strong>
+        <div class="small">${when}${where}</div>
+        <div class="small">Category: ${cat}</div>
+        ${e.details ? `<div class="small">${escapeHtml(e.details)}</div>` : ""}
+      </div>
+      <div>
+        <button class="danger" type="button" onclick="deleteEvent('${e.id}')">Delete</button>
+      </div>
+    `;
+
+    listEl.appendChild(div);
+  });
+}
+
+document.getElementById("searchBox").addEventListener("input", renderEvents);
+document.getElementById("categoryFilter").addEventListener("change", renderEvents);
+
+renderEvents();
+</script>
+
 </body>
 </html>

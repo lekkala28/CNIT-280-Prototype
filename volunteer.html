@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volunteer Directory | Special Space</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  color: #ffffff; /* ALL TEXT WHITE */
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #0b1220;
+}
+
+/* Header */
+header {
+  padding: 25px;
+  text-align: center;
+  background: #111a2e;
+}
+
+/* Layout */
+main {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: auto;
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  background: #111a2e;
+  padding: 20px;
+  border-radius: 12px;
+  flex: 1;
+  min-width: 320px;
+}
+
+/* Volunteer list */
+.volunteer {
+  background: #0f1730;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.small {
+  font-size: 14px;
+}
+
+button {
+  background: #6ea8ff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button.danger {
+  background: #ff6b6b;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #0f1730;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Volunteer Directory</h1>
+  <p>Add yourself to help families in Special Space</p>
+</header>
+
+<main>
+
+  <!-- Volunteer List -->
+  <section class="card">
+    <h2>Current Volunteers</h2>
+
+    <div id="volunteerList"></div>
+
+    <button class="danger" onclick="clearAll()">Clear All</button>
+  </section>
+
+  <!-- Add Volunteer Form -->
+  <section class="card">
+    <h2>Add Yourself</h2>
+
+    <form id="volunteerForm">
+      <label>Full Name *</label>
+      <input type="text" id="name" required>
+
+      <label>Email</label>
+      <input type="email" id="email">
+
+      <label>Phone</label>
+      <input type="tel" id="phone">
+
+      <label>Role *</label>
+      <select id="role" required>
+        <option value="">Select role</option>
+        <option>Caregiver Support</option>
+        <option>Event Helper</option>
+        <option>Mentor / Buddy</option>
+        <option>Transportation</option>
+        <option>Admin</option>
+        <option>Other</option>
+      </select>
+
+      <label>Availability *</label>
+      <select id="availability" required>
+        <option value="">Select availability</option>
+        <option>Weekdays</option>
+        <option>Weeknights</option>
+        <option>Weekends</option>
+        <option>Flexible</option>
+      </select>
+
+      <label>Notes</label>
+      <textarea id="notes"></textarea>
+
+      <button type="submit">Add Me</button>
+    </form>
+  </section>
+
+</main>
+
+<script>
+const STORAGE_KEY = "special_space_volunteers";
+
+let volunteers = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(volunteers));
+}
+
+function renderVolunteers() {
+  const list = document.getElementById("volunteerList");
+  list.innerHTML = "";
+
+  if (volunteers.length === 0) {
+    list.innerHTML = "<p>No volunteers yet.</p>";
+    return;
+  }
+
+  volunteers.forEach((v, index) => {
+    const div = document.createElement("div");
+    div.className = "volunteer";
+
+    div.innerHTML = `
+      <div>
+        <strong>${v.name}</strong><br>
+        <span class="small">${v.role} • ${v.availability}</span><br>
+        <span class="small">${v.email || ""} ${v.phone || ""}</span><br>
+        <span class="small">${v.notes || ""}</span>
+      </div>
+      <button class="danger" onclick="deleteVolunteer(${index})">Delete</button>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+function deleteVolunteer(i) {
+  volunteers.splice(i, 1);
+  saveData();
+  renderVolunteers();
+}
+
+function clearAll() {
+  if (confirm("Clear all volunteers?")) {
+    volunteers = [];
+    saveData();
+    renderVolunteers();
+  }
+}
+
+document.getElementById("volunteerForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const newVolunteer = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    role: document.getElementById("role").value,
+    availability: document.getElementById("availability").value,
+    notes: document.getElementById("notes").value
+  };
+
+  volunteers.push(newVolunteer);
+  saveData();
+  renderVolunteers();
+
+  this.reset();
+});
+
+renderVolunteers();
+</script>
+
+</body>
+</html>
