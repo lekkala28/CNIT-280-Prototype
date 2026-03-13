@@ -12,20 +12,37 @@
       padding: 0;
     }
 
-    .container {
+    .page-wrap {
       width: 90%;
-      max-width: 500px;
+      max-width: 1060px;
       margin: 50px auto;
+      display: flex;
+      gap: 30px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 800px) {
+      .page-wrap {
+        flex-direction: column;
+      }
+    }
+
+    .container {
+      flex: 1;
+      min-width: 0;
       background: white;
       padding: 25px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
+    h1, h2 {
+      color: #222;
+    }
+
     h1 {
       text-align: center;
       margin-bottom: 20px;
-      color: #222;
     }
 
     label {
@@ -81,87 +98,303 @@
       margin-bottom: 10px;
       border-left: 5px solid #007bff;
     }
+
+    .slot-card {
+      background: #eef4ff;
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 5px solid #007bff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slot-card.booked {
+      opacity: 0.55;
+      border-left-color: #999;
+    }
+
+    .slot-info {
+      flex: 1;
+    }
+
+    .slot-info strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .slot-info span {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .slot-badge {
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .slot-badge.available {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .slot-badge.booked {
+      background: #e2e3e5;
+      color: #6c757d;
+    }
+
+    .book-slot-btn {
+      margin-top: 0;
+      width: auto;
+      padding: 8px 14px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Book an Appointment</h1>
+  <div class="page-wrap">
+    <div class="container">
+      <h1>Available Appointments</h1>
+      <p style="text-align:center; color:#555;">Select an open time slot to book, or browse what's available.</p>
+      <div id="slotList"></div>
+    </div>
 
-    <form id="appointmentForm">
-      <label for="name">Full Name</label>
-      <input type="text" id="name" required />
+    <div class="container">
+      <h1>Book an Appointment</h1>
 
-      <label for="email">Email</label>
-      <input type="email" id="email" required />
+      <form id="appointmentForm">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" required />
 
-      <label for="date">Appointment Date</label>
-      <input type="date" id="date" required />
+        <label for="email">Email</label>
+        <input type="email" id="email" required />
 
-      <label for="time">Appointment Time</label>
-      <input type="time" id="time" required />
+        <label for="slotSelect">Available Time Slot</label>
+        <select id="slotSelect" required>
+          <option value="">Select a time slot</option>
+        </select>
 
-      <label for="reason">Reason for Appointment</label>
-      <textarea id="reason" placeholder="Enter details here..." required></textarea>
+        <label for="reason">Reason for Appointment</label>
+        <textarea id="reason" placeholder="Enter details here..." required></textarea>
 
-      <button type="submit">Book Appointment</button>
-    </form>
+        <button type="submit">Book Appointment</button>
+      </form>
 
-    <div class="message" id="message"></div>
+      <div class="message" id="message"></div>
 
-    <div class="appointments">
-      <h2>Booked Appointments</h2>
-      <div id="appointmentList"></div>
+      <div class="appointments">
+        <h2>Booked Appointments</h2>
+        <div id="appointmentList"></div>
+      </div>
     </div>
   </div>
 
   <script>
-    const form = document.getElementById("appointmentForm");
-    const message = document.getElementById("message");
-    const appointmentList = document.getElementById("appointmentList");
+    var SLOTS_KEY = "special_space_slots_v1";
+    var APPTS_KEY = "appointments";
 
-    let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+    var defaultSlots = [
+      { id: "s1", date: "2026-03-16", time: "09:00", provider: "Dr. Ramirez", type: "Initial Consultation" },
+      { id: "s2", date: "2026-03-16", time: "10:30", provider: "Dr. Ramirez", type: "Initial Consultation" },
+      { id: "s3", date: "2026-03-16", time: "13:00", provider: "Ms. Chen", type: "Therapy Session" },
+      { id: "s4", date: "2026-03-17", time: "09:00", provider: "Dr. Ramirez", type: "Follow-up" },
+      { id: "s5", date: "2026-03-17", time: "11:00", provider: "Ms. Chen", type: "Therapy Session" },
+      { id: "s6", date: "2026-03-17", time: "14:00", provider: "Mr. Patel", type: "Career Counseling" },
+      { id: "s7", date: "2026-03-18", time: "09:30", provider: "Dr. Ramirez", type: "Initial Consultation" },
+      { id: "s8", date: "2026-03-18", time: "11:00", provider: "Ms. Chen", type: "Therapy Session" },
+      { id: "s9", date: "2026-03-19", time: "10:00", provider: "Mr. Patel", type: "Career Counseling" },
+      { id: "s10", date: "2026-03-19", time: "13:30", provider: "Dr. Ramirez", type: "Follow-up" },
+      { id: "s11", date: "2026-03-20", time: "09:00", provider: "Ms. Chen", type: "Therapy Session" },
+      { id: "s12", date: "2026-03-20", time: "15:00", provider: "Mr. Patel", type: "Career Counseling" }
+    ];
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function loadSlots() {
+      try {
+        var raw = localStorage.getItem(SLOTS_KEY);
+        if (!raw) {
+          localStorage.setItem(SLOTS_KEY, JSON.stringify(defaultSlots));
+          return defaultSlots.map(function(s) { return Object.assign({}, s); });
+        }
+        var parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : defaultSlots;
+      } catch (e) {
+        return defaultSlots;
+      }
+    }
+
+    function saveSlots(slots) {
+      localStorage.setItem(SLOTS_KEY, JSON.stringify(slots));
+    }
+
+    var slots = loadSlots();
+    var appointments = JSON.parse(localStorage.getItem(APPTS_KEY)) || [];
+
+    function getBookedSlotIds() {
+      var ids = {};
+      appointments.forEach(function(a) {
+        if (a.slotId) ids[a.slotId] = true;
+      });
+      return ids;
+    }
+
+    function formatDate(dateStr) {
+      var parts = dateStr.split("-");
+      var d = new Date(parts[0], parts[1] - 1, parts[2]);
+      var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      return days[d.getDay()] + ", " + months[d.getMonth()] + " " + d.getDate();
+    }
+
+    function formatTime(timeStr) {
+      var parts = timeStr.split(":");
+      var h = parseInt(parts[0], 10);
+      var m = parts[1];
+      var ampm = h >= 12 ? "PM" : "AM";
+      if (h === 0) h = 12;
+      else if (h > 12) h -= 12;
+      return h + ":" + m + " " + ampm;
+    }
+
+    function renderSlots() {
+      var listEl = document.getElementById("slotList");
+      var selectEl = document.getElementById("slotSelect");
+      var bookedIds = getBookedSlotIds();
+
+      listEl.innerHTML = "";
+      selectEl.innerHTML = '<option value="">Select a time slot</option>';
+
+      var sorted = slots.slice().sort(function(a, b) {
+        if (a.date !== b.date) return a.date.localeCompare(b.date);
+        return a.time.localeCompare(b.time);
+      });
+
+      sorted.forEach(function(slot) {
+        var isBooked = !!bookedIds[slot.id];
+        var div = document.createElement("div");
+        div.className = "slot-card" + (isBooked ? " booked" : "");
+
+        var dateLabel = formatDate(slot.date);
+        var timeLabel = formatTime(slot.time);
+
+        div.innerHTML =
+          '<div class="slot-info">' +
+            "<strong>" + escapeHtml(slot.type) + "</strong>" +
+            "<span>" + escapeHtml(dateLabel) + " at " + escapeHtml(timeLabel) + " &mdash; " + escapeHtml(slot.provider) + "</span>" +
+          "</div>" +
+          '<span class="slot-badge ' + (isBooked ? "booked" : "available") + '">' +
+            (isBooked ? "Booked" : "Open") +
+          "</span>" +
+          (!isBooked ? '<button class="book-slot-btn" type="button" onclick="selectSlot(\'' + slot.id + '\')">Book</button>' : "");
+
+        listEl.appendChild(div);
+
+        if (!isBooked) {
+          var opt = document.createElement("option");
+          opt.value = slot.id;
+          opt.textContent = dateLabel + " " + timeLabel + " - " + slot.type + " (" + slot.provider + ")";
+          selectEl.appendChild(opt);
+        }
+      });
+
+      if (selectEl.options.length === 1) {
+        var opt = document.createElement("option");
+        opt.value = "";
+        opt.disabled = true;
+        opt.textContent = "No available slots";
+        selectEl.appendChild(opt);
+      }
+    }
+
+    function selectSlot(slotId) {
+      var selectEl = document.getElementById("slotSelect");
+      selectEl.value = slotId;
+      document.getElementById("name").focus();
+    }
 
     function displayAppointments() {
-      appointmentList.innerHTML = "";
+      var appointmentListEl = document.getElementById("appointmentList");
+      appointmentListEl.innerHTML = "";
 
       if (appointments.length === 0) {
-        appointmentList.innerHTML = "<p>No appointments booked yet.</p>";
+        appointmentListEl.innerHTML = "<p>No appointments booked yet.</p>";
         return;
       }
 
-      appointments.forEach((appt, index) => {
-        const card = document.createElement("div");
+      appointments.forEach(function(appt) {
+        var card = document.createElement("div");
         card.classList.add("appointment-card");
-        card.innerHTML = `
-          <strong>${appt.name}</strong><br>
-          Email: ${appt.email}<br>
-          Date: ${appt.date}<br>
-          Time: ${appt.time}<br>
-          Reason: ${appt.reason}
-        `;
-        appointmentList.appendChild(card);
+
+        var slotInfo = "";
+        if (appt.slotId) {
+          var slot = slots.find(function(s) { return s.id === appt.slotId; });
+          if (slot) {
+            slotInfo =
+              "Type: " + escapeHtml(slot.type) + "<br>" +
+              "Provider: " + escapeHtml(slot.provider) + "<br>" +
+              "Date: " + escapeHtml(formatDate(slot.date)) + "<br>" +
+              "Time: " + escapeHtml(formatTime(slot.time)) + "<br>";
+          }
+        }
+
+        if (!slotInfo) {
+          slotInfo =
+            "Date: " + escapeHtml(appt.date || "") + "<br>" +
+            "Time: " + escapeHtml(appt.time || "") + "<br>";
+        }
+
+        card.innerHTML =
+          "<strong>" + escapeHtml(appt.name) + "</strong><br>" +
+          "Email: " + escapeHtml(appt.email) + "<br>" +
+          slotInfo +
+          "Reason: " + escapeHtml(appt.reason);
+
+        appointmentListEl.appendChild(card);
       });
     }
+
+    var form = document.getElementById("appointmentForm");
+    var messageEl = document.getElementById("message");
 
     form.addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const appointment = {
+      var slotId = document.getElementById("slotSelect").value;
+      if (!slotId) {
+        alert("Please select an available time slot.");
+        return;
+      }
+
+      var appointment = {
         name: document.getElementById("name").value,
         email: document.getElementById("email").value,
-        date: document.getElementById("date").value,
-        time: document.getElementById("time").value,
+        slotId: slotId,
         reason: document.getElementById("reason").value
       };
 
       appointments.push(appointment);
-      localStorage.setItem("appointments", JSON.stringify(appointments));
+      localStorage.setItem(APPTS_KEY, JSON.stringify(appointments));
 
-      message.textContent = "Appointment booked successfully!";
+      messageEl.textContent = "Appointment booked successfully!";
       form.reset();
+      renderSlots();
       displayAppointments();
     });
 
+    renderSlots();
     displayAppointments();
   </script>
 </body>
