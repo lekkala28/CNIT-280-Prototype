@@ -23,6 +23,7 @@ All data is stored in the browser's `localStorage`. Pages share data through the
 - `special_space_success_stories_v1` -- success stories (success.html)
 - `special_space_jobs_v1` -- job postings (jobs.html)
 - `special_space_slots_v1` -- available appointment time slots (appointments.html)
+- `special_space_families_v1` -- family directory entries (families.html)
 - `appointments` -- booked appointments (appointments.html; note: not namespaced like the others)
 
 The dashboard reads from profile, volunteers, events, and announcement keys to display aggregate KPIs.

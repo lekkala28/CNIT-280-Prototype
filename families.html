@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Directory | Special Space</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page-wrap {
+      width: 90%;
+      max-width: 1060px;
+      margin: 50px auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 6px;
+      color: #222;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 24px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .toggle-btn {
+      padding: 12px 24px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .toggle-btn:hover {
+      background: #0056b3;
+    }
+
+    .form-panel {
+      display: none;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 520px;
+      margin: 0 auto 30px auto;
+    }
+
+    .form-panel.open {
+      display: block;
+    }
+
+    .form-panel h2 {
+      margin-top: 0;
+      color: #222;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #222;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .submit-btn {
+      margin-top: 18px;
+      padding: 12px 24px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+    }
+
+    .submit-btn:hover {
+      background: #0056b3;
+    }
+
+    .message {
+      margin-top: 12px;
+      text-align: center;
+      font-weight: bold;
+      color: green;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header {
+      background: #007bff;
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: #007bff;
+      flex-shrink: 0;
+    }
+
+    .card-header-text {
+      color: white;
+    }
+
+    .card-header-text h3 {
+      margin: 0 0 4px 0;
+      font-size: 18px;
+      color: white;
+    }
+
+    .card-header-text span {
+      font-size: 14px;
+      opacity: 0.9;
+      color: white;
+    }
+
+    .card-body {
+      padding: 16px 20px 20px 20px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: baseline;
+      padding: 6px 0;
+      font-size: 14px;
+      color: #333;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: bold;
+      width: 80px;
+      flex-shrink: 0;
+      color: #555;
+    }
+
+    .info-value {
+      color: #222;
+    }
+
+    .bio-section {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+      font-size: 14px;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: #888;
+      padding: 40px 0;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <h1>Family Directory</h1>
+    <p class="subtitle">Connect with other families in the Special Space community.</p>
+
+    <div class="top-bar">
+      <button class="toggle-btn" id="toggleFormBtn" onclick="toggleForm()">Add Your Family</button>
+    </div>
+
+    <div class="form-panel" id="formPanel">
+      <h2>Add Your Information</h2>
+
+      <form id="familyForm">
+        <label for="fullName">Full Name *</label>
+        <input type="text" id="fullName" required placeholder="e.g., Maria Johnson" />
+
+        <label for="age">Age</label>
+        <input type="number" id="age" min="1" max="120" placeholder="e.g., 34" />
+
+        <label for="city">City *</label>
+        <input type="text" id="city" required placeholder="e.g., Whispering Hills" />
+
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" placeholder="e.g., (555) 123-4567" />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="e.g., maria@email.com" />
+
+        <label for="bio">About Your Family</label>
+        <textarea id="bio" placeholder="Tell the community a little about your family..."></textarea>
+
+        <button type="submit" class="submit-btn">Add to Directory</button>
+      </form>
+
+      <div class="message" id="message"></div>
+    </div>
+
+    <div id="directoryGrid" class="grid"></div>
+    <div id="emptyMsg" class="empty-msg" style="display:none;">No families in the directory yet. Be the first to add yours!</div>
+  </div>
+
+  <script>
+    var FAMILIES_KEY = "special_space_families_v1";
+
+    var defaultFamilies = [
+      {
+        id: "f1",
+        name: "Maria Johnson",
+        age: 34,
+        city: "Whispering Hills",
+        phone: "(555) 210-4488",
+        email: "maria.johnson@email.com",
+        bio: "Mother of two, one with autism. We moved to Whispering Hills last year and are looking for inclusive activities and a supportive network for our family."
+      },
+      {
+        id: "f2",
+        name: "David and Kim Park",
+        age: 41,
+        city: "Whispering Hills",
+        phone: "(555) 339-7120",
+        email: "parkfamily@email.com",
+        bio: "We have a 10-year-old son with Down syndrome. David coaches adaptive sports on weekends and Kim runs a parent support blog. Always happy to meet new families."
+      },
+      {
+        id: "f3",
+        name: "Rosa Gutierrez",
+        age: 28,
+        city: "Cedar Grove",
+        phone: "(555) 876-2201",
+        email: "rosa.g@email.com",
+        bio: "Full-time caregiver for my younger brother who has cerebral palsy. I am looking for respite care resources and other caregivers to connect with."
+      }
+    ];
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function loadFamilies() {
+      try {
+        var raw = localStorage.getItem(FAMILIES_KEY);
+        if (!raw) {
+          localStorage.setItem(FAMILIES_KEY, JSON.stringify(defaultFamilies));
+          return defaultFamilies.map(function(f) { return Object.assign({}, f); });
+        }
+        var parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+          localStorage.setItem(FAMILIES_KEY, JSON.stringify(defaultFamilies));
+          return defaultFamilies.map(function(f) { return Object.assign({}, f); });
+        }
+        return parsed;
+      } catch (e) {
+        return defaultFamilies;
+      }
+    }
+
+    function saveFamilies(list) {
+      localStorage.setItem(FAMILIES_KEY, JSON.stringify(list));
+    }
+
+    function getInitials(name) {
+      var parts = name.trim().split(/\s+/);
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+      return name.trim().substring(0, 2).toUpperCase();
+    }
+
+    var families = loadFamilies();
+
+    function renderDirectory() {
+      var gridEl = document.getElementById("directoryGrid");
+      var emptyEl = document.getElementById("emptyMsg");
+
+      gridEl.innerHTML = "";
+
+      if (families.length === 0) {
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+
+      families.forEach(function(f) {
+        var card = document.createElement("div");
+        card.className = "profile-card";
+
+        var avatarContent = escapeHtml(getInitials(f.name));
+
+        var ageDisplay = f.age ? escapeHtml(String(f.age)) + " years old" : "";
+        var subtitle = [ageDisplay, escapeHtml(f.city)].filter(Boolean).join(" - ");
+
+        var bodyRows = "";
+
+        if (f.city) {
+          bodyRows += '<div class="info-row"><span class="info-label">City</span><span class="info-value">' + escapeHtml(f.city) + '</span></div>';
+        }
+        if (f.age) {
+          bodyRows += '<div class="info-row"><span class="info-label">Age</span><span class="info-value">' + escapeHtml(String(f.age)) + '</span></div>';
+        }
+        if (f.phone) {
+          bodyRows += '<div class="info-row"><span class="info-label">Phone</span><span class="info-value">' + escapeHtml(f.phone) + '</span></div>';
+        }
+        if (f.email) {
+          bodyRows += '<div class="info-row"><span class="info-label">Email</span><span class="info-value">' + escapeHtml(f.email) + '</span></div>';
+        }
+
+        var bioHtml = "";
+        if (f.bio) {
+          bioHtml = '<div class="bio-section">' + escapeHtml(f.bio) + '</div>';
+        }
+
+        card.innerHTML =
+          '<div class="card-header">' +
+            '<div class="avatar">' + avatarContent + '</div>' +
+            '<div class="card-header-text">' +
+              '<h3>' + escapeHtml(f.name) + '</h3>' +
+              '<span>' + subtitle + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="card-body">' +
+            bodyRows +
+            bioHtml +
+          '</div>';
+
+        gridEl.appendChild(card);
+      });
+    }
+
+    function toggleForm() {
+      var panel = document.getElementById("formPanel");
+      var btn = document.getElementById("toggleFormBtn");
+      if (panel.classList.contains("open")) {
+        panel.classList.remove("open");
+        btn.textContent = "Add Your Family";
+      } else {
+        panel.classList.add("open");
+        btn.textContent = "Cancel";
+      }
+    }
+
+    document.getElementById("familyForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      var entry = {
+        id: (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+        name: document.getElementById("fullName").value.trim(),
+        age: parseInt(document.getElementById("age").value, 10) || null,
+        city: document.getElementById("city").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        bio: document.getElementById("bio").value.trim()
+      };
+
+      if (!entry.name || !entry.city) {
+        alert("Please enter at least a name and city.");
+        return;
+      }
+
+      families.unshift(entry);
+      saveFamilies(families);
+      renderDirectory();
+
+      document.getElementById("familyForm").reset();
+      document.getElementById("message").textContent = "Your family has been added to the directory!";
+
+      document.getElementById("formPanel").classList.remove("open");
+      document.getElementById("toggleFormBtn").textContent = "Add Your Family";
+    });
+
+    renderDirectory();
+  </script>
+</body>
+</html>
