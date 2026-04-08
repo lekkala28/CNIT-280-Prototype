@@ -313,13 +313,15 @@
       <div id="recentEntries"></div>
       <div id="entriesEmpty" class="empty-msg" style="display:none;">No health entries yet. Log your first entry below.</div>
 
-      <h2>Care Plan Summary</h2>
-      <div id="carePlanSummary"></div>
-      <div id="carePlanEmpty" class="empty-msg" style="display:none;">No care plan set. Use the Update Care Plan form to create one.</div>
+      <div id="carePlanSection" style="display:none;">
+        <h2>Care Plan Summary</h2>
+        <div id="carePlanSummary"></div>
+        <div id="carePlanEmpty" class="empty-msg" style="display:none;">No care plan set. Use the Update Care Plan form to create one.</div>
+      </div>
 
       <div style="margin-top: 20px;">
         <button class="action-btn" onclick="showView('viewLogMetrics')">Log Health Metrics</button>
-        <button class="action-btn" style="margin-left: 10px;" onclick="showView('viewUpdateCarePlan', 'self')">Update Care Plan</button>
+        <button id="updateCarePlanBtn" class="action-btn" style="margin-left: 10px; display:none;" onclick="showView('viewUpdateCarePlan', 'self')">Update Care Plan</button>
       </div>
 
       <div id="caregiverSection">
@@ -578,13 +580,20 @@ function deleteEntry(id) {
 function toggleCaregiverMode() {
   var checked = document.getElementById("caregiverToggle").checked;
   document.getElementById("caregiverContent").style.display = checked ? "block" : "none";
+  document.getElementById("carePlanSection").style.display = checked ? "block" : "none";
+  document.getElementById("updateCarePlanBtn").style.display = checked ? "inline-block" : "none";
   saveJSON(CAREGIVER_KEY, checked);
+  if (checked) {
+    renderCarePlanSummary();
+  }
 }
 
 function restoreCaregiverMode() {
   var mode = loadJSON(CAREGIVER_KEY, false);
   document.getElementById("caregiverToggle").checked = mode;
   document.getElementById("caregiverContent").style.display = mode ? "block" : "none";
+  document.getElementById("carePlanSection").style.display = mode ? "block" : "none";
+  document.getElementById("updateCarePlanBtn").style.display = mode ? "inline-block" : "none";
 }
 
 function renderClientList() {
