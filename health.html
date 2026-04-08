@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Health Information | Special Space</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a0033;
+      color: white;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100%;
+      background-color: black;
+      padding-top: 30px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+    }
+
+    .sidebar button {
+      display: block;
+      width: 80%;
+      margin: 15px auto;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .sidebar button:hover {
+      background-color: #d9d9d9;
+    }
+
+    .main {
+      margin-left: 220px;
+      padding: 40px;
+      max-width: 950px;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 42px;
+      letter-spacing: 3px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      letter-spacing: 2px;
+      margin-top: 30px;
+      margin-bottom: 14px;
+    }
+
+    .intro {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: #2a0055;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .card h3 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: none;
+      background: #140026;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    select option {
+      background: #140026;
+      color: white;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    input.invalid, textarea.invalid, select.invalid {
+      border: 2px solid #ff4d4d;
+    }
+
+    .action-btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: white;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .action-btn:hover {
+      background: #d9d9d9;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 16px;
+      margin-right: 10px;
+      padding: 12px 16px;
+      background: #555;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .back-btn:hover {
+      background: #777;
+    }
+
+    .delete-btn {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .clear-btn {
+      background: #ff4d4d;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .clear-btn:hover {
+      opacity: 0.95;
+    }
+
+    .select-btn {
+      background: #7b4fff;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .select-btn:hover {
+      opacity: 0.9;
+    }
+
+    .info {
+      font-size: 15px;
+      margin: 4px 0;
+      line-height: 1.5;
+    }
+
+    .meta {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 8px;
+    }
+
+    .confirmation {
+      display: none;
+      background: #1a4d1a;
+      border-left: 5px solid #33cc33;
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    .empty-msg {
+      text-align: center;
+      font-size: 16px;
+      opacity: 0.85;
+      margin: 20px 0;
+    }
+
+    .client-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #140026;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .client-row span {
+      font-size: 15px;
+    }
+
+    .client-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .add-client-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .add-client-row input {
+      flex: 1;
+      margin-top: 0;
+    }
+
+    .caregiver-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+
+    .caregiver-toggle input[type="checkbox"] {
+      width: auto;
+      cursor: pointer;
+    }
+
+    .view-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .view-header h1 {
+      text-align: left;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar">
+    <a href="index.html"><button>Home</button></a>
+    <a href="dashboard.html"><button>Dashboard</button></a>
+    <a href="profile.html"><button>Profile</button></a>
+    <a href="events.html"><button>Events</button></a>
+    <a href="jobs.html"><button>Open Jobs</button></a>
+    <a href="volunteer.html"><button>Volunteer</button></a>
+    <a href="help.html"><button>Help</button></a>
+    <a href="success.html"><button>Success Stories</button></a>
+    <a href="contact.html"><button>Contact</button></a>
+    <a href="login.html"><button>Login</button></a>
+    <a href="appointments.html"><button>Appointments</button></a>
+    <a href="families.html"><button>Families</button></a>
+    <a href="health.html"><button>Health Info</button></a>
+  </div>
+
+  <div class="main">
+
+    <div id="confirmation" class="confirmation"></div>
+
+    <!-- ==================== VIEW: Dashboard ==================== -->
+    <div id="viewDashboard">
+      <h1>Health Information</h1>
+      <div class="intro">
+        Track health metrics, review care plans, and manage client health records
+        for the Whispering Hills community.
+      </div>
+
+      <h2>Recent Health Entries</h2>
+      <div id="recentEntries"></div>
+      <div id="entriesEmpty" class="empty-msg" style="display:none;">No health entries yet. Log your first entry below.</div>
+
+      <h2>Care Plan Summary</h2>
+      <div id="carePlanSummary"></div>
+      <div id="carePlanEmpty" class="empty-msg" style="display:none;">No care plan set. Use the Update Care Plan form to create one.</div>
+
+      <div style="margin-top: 20px;">
+        <button class="action-btn" onclick="showView('viewLogMetrics')">Log Health Metrics</button>
+        <button class="action-btn" style="margin-left: 10px;" onclick="showView('viewUpdateCarePlan', 'self')">Update Care Plan</button>
+      </div>
+
+      <div id="caregiverSection">
+        <h2>Client List</h2>
+        <div class="caregiver-toggle">
+          <input type="checkbox" id="caregiverToggle" onchange="toggleCaregiverMode()">
+          <label for="caregiverToggle" style="display:inline; margin-top:0; font-weight:normal;">I am a caregiver</label>
+        </div>
+
+        <div id="caregiverContent" style="display:none;">
+          <div id="clientList"></div>
+          <div id="clientsEmpty" class="empty-msg" style="display:none;">No clients added yet.</div>
+
+          <div class="add-client-row">
+            <input type="text" id="newClientName" placeholder="Client name" />
+            <button class="action-btn" style="margin-top:0;" onclick="addClient()">Add Client</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW: Log Health Metrics ==================== -->
+    <div id="viewLogMetrics" style="display:none;">
+      <div class="view-header">
+        <button class="back-btn" onclick="showView('viewDashboard')">Back</button>
+        <h1>Log Health Metrics</h1>
+      </div>
+
+      <div class="card">
+        <form id="metricsForm" novalidate>
+          <label>Weight (lbs) *</label>
+          <input id="metricWeight" type="number" step="0.1" placeholder="e.g., 150" />
+
+          <label>Blood Pressure *</label>
+          <input id="metricBP" type="text" placeholder="e.g., 120/80" />
+
+          <label>Mood Rating *</label>
+          <select id="metricMood">
+            <option value="">Select a rating</option>
+            <option value="1">1 - Very Low</option>
+            <option value="2">2 - Low</option>
+            <option value="3">3 - Moderate</option>
+            <option value="4">4 - Good</option>
+            <option value="5">5 - Excellent</option>
+          </select>
+
+          <label>Additional Notes</label>
+          <textarea id="metricNotes" placeholder="Any additional observations or details..."></textarea>
+
+          <div>
+            <button class="action-btn" type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW: Client Health View ==================== -->
+    <div id="viewClientHealth" style="display:none;">
+      <div class="view-header">
+        <button class="back-btn" onclick="showView('viewDashboard')">Back to Dashboard</button>
+        <h1 id="clientViewTitle">Client Health</h1>
+      </div>
+
+      <h2>Client Health Entries</h2>
+      <div id="clientEntries"></div>
+      <div id="clientEntriesEmpty" class="empty-msg" style="display:none;">No health entries for this client.</div>
+
+      <h2>Current Care Plan</h2>
+      <div id="clientCarePlan"></div>
+      <div id="clientCarePlanEmpty" class="empty-msg" style="display:none;">No care plan set for this client.</div>
+
+      <div style="margin-top: 20px;">
+        <button class="action-btn" onclick="showView('viewLogMetrics')">Log Health Metrics</button>
+        <button class="action-btn" style="margin-left: 10px;" onclick="openUpdateCarePlanForClient()">Update Care Plan</button>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW: Update Care Plan ==================== -->
+    <div id="viewUpdateCarePlan" style="display:none;">
+      <div class="view-header">
+        <button class="back-btn" onclick="goBackFromCarePlan()">Back</button>
+        <h1 id="carePlanFormTitle">Update Care Plan</h1>
+      </div>
+
+      <div class="card">
+        <form id="carePlanForm" novalidate>
+          <label>Goals *</label>
+          <textarea id="cpGoals" placeholder="e.g., Improve mobility, maintain healthy weight"></textarea>
+
+          <label>Medications *</label>
+          <textarea id="cpMedications" placeholder="e.g., Medication A 10mg daily, Medication B as needed"></textarea>
+
+          <label>Instructions *</label>
+          <textarea id="cpInstructions" placeholder="e.g., Take medication with food, exercise 30 min daily"></textarea>
+
+          <label>Additional Notes</label>
+          <textarea id="cpNotes" placeholder="Any other relevant information..."></textarea>
+
+          <div>
+            <button class="action-btn" type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+var ENTRIES_KEY = "special_space_health_entries_v1";
+var CARE_PLAN_KEY = "special_space_care_plan_v1";
+var CLIENTS_KEY = "special_space_clients_v1";
+var CAREGIVER_KEY = "special_space_caregiver_mode_v1";
+
+var currentClientId = null;
+var carePlanTarget = "self";
+
+function escapeHtml(str) {
+  return String(str || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function loadJSON(key, fallback) {
+  try {
+    var raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function saveJSON(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function showConfirmation(message) {
+  var el = document.getElementById("confirmation");
+  el.textContent = message;
+  el.style.display = "block";
+  setTimeout(function() {
+    el.style.display = "none";
+  }, 4000);
+}
+
+function showView(viewId, param) {
+  var views = ["viewDashboard", "viewLogMetrics", "viewClientHealth", "viewUpdateCarePlan"];
+  for (var i = 0; i < views.length; i++) {
+    document.getElementById(views[i]).style.display = "none";
+  }
+  document.getElementById(viewId).style.display = "block";
+  window.scrollTo(0, 0);
+
+  if (viewId === "viewDashboard") {
+    currentClientId = null;
+    renderDashboard();
+  } else if (viewId === "viewLogMetrics") {
+    clearMetricsForm();
+  } else if (viewId === "viewClientHealth") {
+    renderClientHealth();
+  } else if (viewId === "viewUpdateCarePlan") {
+    if (param) {
+      carePlanTarget = param;
+    }
+    loadCarePlanForm();
+  }
+}
+
+// --- Dashboard ---
+
+function renderDashboard() {
+  renderRecentEntries();
+  renderCarePlanSummary();
+  renderClientList();
+  restoreCaregiverMode();
+}
+
+function renderRecentEntries() {
+  var entries = loadJSON(ENTRIES_KEY, []);
+  var container = document.getElementById("recentEntries");
+  var emptyEl = document.getElementById("entriesEmpty");
+  container.innerHTML = "";
+
+  var selfEntries = [];
+  for (var i = 0; i < entries.length; i++) {
+    if (!entries[i].clientId) {
+      selfEntries.push(entries[i]);
+    }
+  }
+
+  if (selfEntries.length === 0) {
+    emptyEl.style.display = "block";
+    return;
+  }
+  emptyEl.style.display = "none";
+
+  selfEntries.sort(function(a, b) {
+    return (b.createdAt || 0) - (a.createdAt || 0);
+  });
+
+  var limit = Math.min(selfEntries.length, 5);
+  for (var i = 0; i < limit; i++) {
+    var e = selfEntries[i];
+    var div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML =
+      "<div class='info'><strong>Weight:</strong> " + escapeHtml(e.weight) + " lbs</div>" +
+      "<div class='info'><strong>Blood Pressure:</strong> " + escapeHtml(e.bloodPressure) + "</div>" +
+      "<div class='info'><strong>Mood:</strong> " + escapeHtml(moodLabel(e.moodRating)) + "</div>" +
+      (e.notes ? "<div class='info'><strong>Notes:</strong> " + escapeHtml(e.notes) + "</div>" : "") +
+      "<div class='meta'>Logged: " + new Date(e.createdAt).toLocaleString() + "</div>" +
+      "<button class='delete-btn' onclick=\"deleteEntry('" + e.id + "')\">Delete</button>";
+    container.appendChild(div);
+  }
+}
+
+function renderCarePlanSummary() {
+  var plan = loadJSON(CARE_PLAN_KEY, null);
+  var container = document.getElementById("carePlanSummary");
+  var emptyEl = document.getElementById("carePlanEmpty");
+  container.innerHTML = "";
+
+  if (!plan || !plan.goals) {
+    emptyEl.style.display = "block";
+    return;
+  }
+  emptyEl.style.display = "none";
+
+  var div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML =
+    "<div class='info'><strong>Goals:</strong> " + escapeHtml(plan.goals) + "</div>" +
+    "<div class='info'><strong>Medications:</strong> " + escapeHtml(plan.medications) + "</div>" +
+    "<div class='info'><strong>Instructions:</strong> " + escapeHtml(plan.instructions) + "</div>" +
+    (plan.notes ? "<div class='info'><strong>Notes:</strong> " + escapeHtml(plan.notes) + "</div>" : "") +
+    "<div class='meta'>Last updated: " + new Date(plan.updatedAt).toLocaleString() + "</div>";
+  container.appendChild(div);
+}
+
+function deleteEntry(id) {
+  var entries = loadJSON(ENTRIES_KEY, []);
+  entries = entries.filter(function(e) { return e.id !== id; });
+  saveJSON(ENTRIES_KEY, entries);
+
+  if (currentClientId) {
+    renderClientHealth();
+  } else {
+    renderRecentEntries();
+  }
+}
+
+// --- Caregiver / Clients ---
+
+function toggleCaregiverMode() {
+  var checked = document.getElementById("caregiverToggle").checked;
+  document.getElementById("caregiverContent").style.display = checked ? "block" : "none";
+  saveJSON(CAREGIVER_KEY, checked);
+}
+
+function restoreCaregiverMode() {
+  var mode = loadJSON(CAREGIVER_KEY, false);
+  document.getElementById("caregiverToggle").checked = mode;
+  document.getElementById("caregiverContent").style.display = mode ? "block" : "none";
+}
+
+function renderClientList() {
+  var clients = loadJSON(CLIENTS_KEY, []);
+  var container = document.getElementById("clientList");
+  var emptyEl = document.getElementById("clientsEmpty");
+  container.innerHTML = "";
+
+  if (clients.length === 0) {
+    emptyEl.style.display = "block";
+    return;
+  }
+  emptyEl.style.display = "none";
+
+  for (var i = 0; i < clients.length; i++) {
+    var c = clients[i];
+    var div = document.createElement("div");
+    div.className = "client-row";
+    div.innerHTML =
+      "<span>" + escapeHtml(c.name) + "</span>" +
+      "<div class='client-actions'>" +
+        "<button class='select-btn' onclick=\"selectClient('" + c.id + "')\">Select Client</button>" +
+        "<button class='delete-btn' onclick=\"deleteClient('" + c.id + "')\">Remove</button>" +
+      "</div>";
+    container.appendChild(div);
+  }
+}
+
+function addClient() {
+  var nameEl = document.getElementById("newClientName");
+  var name = nameEl.value.trim();
+  if (!name) {
+    alert("Please enter a client name.");
+    return;
+  }
+
+  var clients = loadJSON(CLIENTS_KEY, []);
+  clients.push({
+    id: (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+    name: name
+  });
+  saveJSON(CLIENTS_KEY, clients);
+  nameEl.value = "";
+  renderClientList();
+}
+
+function deleteClient(id) {
+  if (!confirm("Remove this client? Their health entries and care plan will also be deleted.")) {
+    return;
+  }
+
+  var clients = loadJSON(CLIENTS_KEY, []);
+  clients = clients.filter(function(c) { return c.id !== id; });
+  saveJSON(CLIENTS_KEY, clients);
+
+  var entries = loadJSON(ENTRIES_KEY, []);
+  entries = entries.filter(function(e) { return e.clientId !== id; });
+  saveJSON(ENTRIES_KEY, entries);
+
+  var plans = loadJSON(CARE_PLAN_KEY + "_clients", {});
+  delete plans[id];
+  saveJSON(CARE_PLAN_KEY + "_clients", plans);
+
+  renderClientList();
+}
+
+function selectClient(id) {
+  currentClientId = id;
+  showView("viewClientHealth");
+}
+
+// --- Client Health View ---
+
+function renderClientHealth() {
+  var clients = loadJSON(CLIENTS_KEY, []);
+  var client = null;
+  for (var i = 0; i < clients.length; i++) {
+    if (clients[i].id === currentClientId) {
+      client = clients[i];
+      break;
+    }
+  }
+
+  if (!client) {
+    showView("viewDashboard");
+    return;
+  }
+
+  document.getElementById("clientViewTitle").textContent = escapeHtml(client.name) + " - Health";
+
+  var entries = loadJSON(ENTRIES_KEY, []);
+  var container = document.getElementById("clientEntries");
+  var emptyEl = document.getElementById("clientEntriesEmpty");
+  container.innerHTML = "";
+
+  var clientEntries = [];
+  for (var i = 0; i < entries.length; i++) {
+    if (entries[i].clientId === currentClientId) {
+      clientEntries.push(entries[i]);
+    }
+  }
+
+  if (clientEntries.length === 0) {
+    emptyEl.style.display = "block";
+  } else {
+    emptyEl.style.display = "none";
+    clientEntries.sort(function(a, b) {
+      return (b.createdAt || 0) - (a.createdAt || 0);
+    });
+
+    for (var i = 0; i < clientEntries.length; i++) {
+      var e = clientEntries[i];
+      var div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML =
+        "<div class='info'><strong>Weight:</strong> " + escapeHtml(e.weight) + " lbs</div>" +
+        "<div class='info'><strong>Blood Pressure:</strong> " + escapeHtml(e.bloodPressure) + "</div>" +
+        "<div class='info'><strong>Mood:</strong> " + escapeHtml(moodLabel(e.moodRating)) + "</div>" +
+        (e.notes ? "<div class='info'><strong>Notes:</strong> " + escapeHtml(e.notes) + "</div>" : "") +
+        "<div class='meta'>Logged: " + new Date(e.createdAt).toLocaleString() + "</div>" +
+        "<button class='delete-btn' onclick=\"deleteEntry('" + e.id + "')\">Delete</button>";
+      container.appendChild(div);
+    }
+  }
+
+  var plans = loadJSON(CARE_PLAN_KEY + "_clients", {});
+  var plan = plans[currentClientId] || null;
+  var planContainer = document.getElementById("clientCarePlan");
+  var planEmpty = document.getElementById("clientCarePlanEmpty");
+  planContainer.innerHTML = "";
+
+  if (!plan || !plan.goals) {
+    planEmpty.style.display = "block";
+  } else {
+    planEmpty.style.display = "none";
+    var div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML =
+      "<div class='info'><strong>Goals:</strong> " + escapeHtml(plan.goals) + "</div>" +
+      "<div class='info'><strong>Medications:</strong> " + escapeHtml(plan.medications) + "</div>" +
+      "<div class='info'><strong>Instructions:</strong> " + escapeHtml(plan.instructions) + "</div>" +
+      (plan.notes ? "<div class='info'><strong>Notes:</strong> " + escapeHtml(plan.notes) + "</div>" : "") +
+      "<div class='meta'>Last updated: " + new Date(plan.updatedAt).toLocaleString() + "</div>";
+    planContainer.appendChild(div);
+  }
+}
+
+function openUpdateCarePlanForClient() {
+  carePlanTarget = currentClientId;
+  showView("viewUpdateCarePlan");
+}
+
+// --- Log Health Metrics ---
+
+function clearMetricsForm() {
+  document.getElementById("metricWeight").value = "";
+  document.getElementById("metricBP").value = "";
+  document.getElementById("metricMood").value = "";
+  document.getElementById("metricNotes").value = "";
+  clearValidation("metricsForm");
+}
+
+document.getElementById("metricsForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  clearValidation("metricsForm");
+
+  var weightEl = document.getElementById("metricWeight");
+  var bpEl = document.getElementById("metricBP");
+  var moodEl = document.getElementById("metricMood");
+  var notesEl = document.getElementById("metricNotes");
+
+  var weight = weightEl.value.trim();
+  var bp = bpEl.value.trim();
+  var mood = moodEl.value;
+  var notes = notesEl.value.trim();
+
+  var valid = true;
+  if (!weight) { weightEl.classList.add("invalid"); valid = false; }
+  if (!bp) { bpEl.classList.add("invalid"); valid = false; }
+  if (!mood) { moodEl.classList.add("invalid"); valid = false; }
+
+  if (!valid) {
+    alert("Please complete all required fields before submitting.");
+    return;
+  }
+
+  var entries = loadJSON(ENTRIES_KEY, []);
+  entries.push({
+    id: (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+    weight: weight,
+    bloodPressure: bp,
+    moodRating: mood,
+    notes: notes,
+    clientId: currentClientId || null,
+    createdAt: Date.now()
+  });
+  saveJSON(ENTRIES_KEY, entries);
+
+  showConfirmation("Health metrics logged successfully.");
+
+  if (currentClientId) {
+    showView("viewClientHealth");
+  } else {
+    showView("viewDashboard");
+  }
+});
+
+// --- Update Care Plan ---
+
+function loadCarePlanForm() {
+  var plan;
+  if (carePlanTarget === "self") {
+    plan = loadJSON(CARE_PLAN_KEY, {});
+    document.getElementById("carePlanFormTitle").textContent = "Update Care Plan";
+  } else {
+    var plans = loadJSON(CARE_PLAN_KEY + "_clients", {});
+    plan = plans[carePlanTarget] || {};
+
+    var clients = loadJSON(CLIENTS_KEY, []);
+    var clientName = "";
+    for (var i = 0; i < clients.length; i++) {
+      if (clients[i].id === carePlanTarget) {
+        clientName = clients[i].name;
+        break;
+      }
+    }
+    document.getElementById("carePlanFormTitle").textContent = "Update Care Plan - " + escapeHtml(clientName);
+  }
+
+  document.getElementById("cpGoals").value = plan.goals || "";
+  document.getElementById("cpMedications").value = plan.medications || "";
+  document.getElementById("cpInstructions").value = plan.instructions || "";
+  document.getElementById("cpNotes").value = plan.notes || "";
+  clearValidation("carePlanForm");
+}
+
+function goBackFromCarePlan() {
+  if (carePlanTarget === "self") {
+    showView("viewDashboard");
+  } else {
+    currentClientId = carePlanTarget;
+    showView("viewClientHealth");
+  }
+}
+
+document.getElementById("carePlanForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  clearValidation("carePlanForm");
+
+  var goalsEl = document.getElementById("cpGoals");
+  var medsEl = document.getElementById("cpMedications");
+  var instrEl = document.getElementById("cpInstructions");
+  var notesEl = document.getElementById("cpNotes");
+
+  var goals = goalsEl.value.trim();
+  var medications = medsEl.value.trim();
+  var instructions = instrEl.value.trim();
+  var notes = notesEl.value.trim();
+
+  var valid = true;
+  if (!goals) { goalsEl.classList.add("invalid"); valid = false; }
+  if (!medications) { medsEl.classList.add("invalid"); valid = false; }
+  if (!instructions) { instrEl.classList.add("invalid"); valid = false; }
+
+  if (!valid) {
+    alert("Please complete all required fields before saving.");
+    return;
+  }
+
+  var planData = {
+    goals: goals,
+    medications: medications,
+    instructions: instructions,
+    notes: notes,
+    updatedAt: Date.now()
+  };
+
+  if (carePlanTarget === "self") {
+    saveJSON(CARE_PLAN_KEY, planData);
+    showConfirmation("Care plan updated successfully.");
+    showView("viewDashboard");
+  } else {
+    var plans = loadJSON(CARE_PLAN_KEY + "_clients", {});
+    plans[carePlanTarget] = planData;
+    saveJSON(CARE_PLAN_KEY + "_clients", plans);
+    showConfirmation("Care plan updated successfully.");
+    currentClientId = carePlanTarget;
+    showView("viewClientHealth");
+  }
+});
+
+// --- Helpers ---
+
+function moodLabel(rating) {
+  var labels = { "1": "1 - Very Low", "2": "2 - Low", "3": "3 - Moderate", "4": "4 - Good", "5": "5 - Excellent" };
+  return labels[String(rating)] || rating;
+}
+
+function clearValidation(formId) {
+  var inputs = document.querySelectorAll("#" + formId + " input, #" + formId + " textarea, #" + formId + " select");
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].classList.remove("invalid");
+  }
+}
+
+renderDashboard();
+</script>
+
+</body>
+</html>
