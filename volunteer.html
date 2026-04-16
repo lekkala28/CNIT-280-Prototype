@@ -8,7 +8,7 @@
 <style>
 * {
   box-sizing: border-box;
-  color: #ffffff; /* ALL TEXT WHITE */
+  color: #ffffff;
 }
 
 body {
@@ -17,14 +17,12 @@ body {
   background-color: #0b1220;
 }
 
-/* Header */
 header {
   padding: 25px;
   text-align: center;
   background: #111a2e;
 }
 
-/* Layout */
 main {
   display: flex;
   flex-wrap: wrap;
@@ -42,7 +40,6 @@ main {
   min-width: 320px;
 }
 
-/* Volunteer list */
 .volunteer {
   background: #0f1730;
   padding: 12px;
@@ -51,6 +48,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
 .small {
@@ -90,23 +88,19 @@ textarea {
 
 <header>
   <h1>Volunteer Directory</h1>
-  <p>Add yourself to help families in Special Space</p>
+  <p>Select a volunteer to view background check information</p>
 </header>
 
 <main>
 
-  <!-- Volunteer List -->
   <section class="card">
-    <h2>Current Volunteers</h2>
-
+    <h2>Registered Volunteers</h2>
     <div id="volunteerList"></div>
-
     <button class="danger" onclick="clearAll()">Clear All</button>
   </section>
 
-  <!-- Add Volunteer Form -->
   <section class="card">
-    <h2>Add Yourself</h2>
+    <h2>Add Volunteer</h2>
 
     <form id="volunteerForm">
       <label>Full Name *</label>
@@ -138,10 +132,25 @@ textarea {
         <option>Flexible</option>
       </select>
 
+      <label>Background Check Status *</label>
+      <select id="bgStatus" required>
+        <option value="">Select status</option>
+        <option>Completed</option>
+        <option>Pending</option>
+        <option>Expired</option>
+        <option>None</option>
+      </select>
+
+      <label>Completion Date</label>
+      <input type="date" id="completionDate">
+
+      <label>Organization</label>
+      <input type="text" id="organization" placeholder="Ex: SafeScreen Inc">
+
       <label>Notes</label>
       <textarea id="notes"></textarea>
 
-      <button type="submit">Add Me</button>
+      <button type="submit">Add Volunteer</button>
     </form>
   </section>
 
@@ -150,10 +159,62 @@ textarea {
 <script>
 const STORAGE_KEY = "special_space_volunteers";
 
-let volunteers = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+const defaultVolunteers = [
+  {
+    name: "Sarah Williams",
+    email: "sarah@email.com",
+    phone: "555-333-4444",
+    role: "Event Helper",
+    availability: "Weekends",
+    notes: "Great with community events",
+    backgroundCheck: {
+      status: "Completed",
+      completionDate: "2026-03-12",
+      organization: "SafeScreen Inc"
+    }
+  },
+  {
+    name: "Michael Johnson",
+    email: "mj@email.com",
+    phone: "555-111-2222",
+    role: "Mentor / Buddy",
+    availability: "Weekdays",
+    notes: "Experienced mentor",
+    backgroundCheck: {
+      status: "Expired",
+      completionDate: "2024-11-20",
+      organization: "VerifiedCheck Group"
+    }
+  },
+  {
+    name: "Emily Davis",
+    email: "emily@email.com",
+    phone: "555-777-8888",
+    role: "Caregiver Support",
+    availability: "Flexible",
+    notes: "New volunteer",
+    backgroundCheck: {
+      status: "None",
+      completionDate: "",
+      organization: ""
+    }
+  }
+];
+
+let volunteers = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultVolunteers;
+saveData();
 
 function saveData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(volunteers));
+}
+
+function escapeHtml(str) {
+  return String(str || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function renderVolunteers() {
@@ -169,22 +230,32 @@ function renderVolunteers() {
     const div = document.createElement("div");
     div.className = "volunteer";
 
+    const bg = v.backgroundCheck || { status: "None" };
+
     div.innerHTML = `
       <div>
-        <strong>${v.name}</strong><br>
-        <span class="small">${v.role} • ${v.availability}</span><br>
-        <span class="small">${v.email || ""} ${v.phone || ""}</span><br>
-        <span class="small">${v.notes || ""}</span>
+        <strong>${escapeHtml(v.name)}</strong><br>
+        <span class="small">${escapeHtml(v.role)} • ${escapeHtml(v.availability)}</span><br>
+        <span class="small">Background Check: ${escapeHtml(bg.status)}</span>
       </div>
-      <button class="danger" onclick="deleteVolunteer(${index})">Delete</button>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" onclick="goToBackground(${index})">View</button>
+        <button type="button" class="danger" onclick="deleteVolunteer(${index})">Delete</button>
+      </div>
     `;
 
     list.appendChild(div);
   });
 }
 
-function deleteVolunteer(i) {
-  volunteers.splice(i, 1);
+function goToBackground(index) {
+  const volunteer = volunteers[index];
+  localStorage.setItem("selected_volunteer", JSON.stringify(volunteer));
+  window.location.href = "backgroundcheck.html";
+}
+
+function deleteVolunteer(index) {
+  volunteers.splice(index, 1);
   saveData();
   renderVolunteers();
 }
@@ -200,19 +271,27 @@ function clearAll() {
 document.getElementById("volunteerForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
+  const status = document.getElementById("bgStatus").value;
+  const completionDate = document.getElementById("completionDate").value;
+  const organization = document.getElementById("organization").value.trim();
+
   const newVolunteer = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
     role: document.getElementById("role").value,
     availability: document.getElementById("availability").value,
-    notes: document.getElementById("notes").value
+    notes: document.getElementById("notes").value.trim(),
+    backgroundCheck: {
+      status: status,
+      completionDate: status === "None" ? "" : completionDate,
+      organization: status === "None" ? "" : organization
+    }
   };
 
   volunteers.push(newVolunteer);
   saveData();
   renderVolunteers();
-
   this.reset();
 });
 
