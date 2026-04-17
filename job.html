@@ -15,7 +15,39 @@
     body {
       background: #03122b;
       color: white;
+      padding-left: 220px;
     }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100%;
+      background-color: black;
+      padding-top: 20px;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .sidebar a { text-decoration: none; }
+
+    .sidebar button {
+      display: block;
+      width: 80%;
+      margin: 10px auto;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    .sidebar button:hover { background-color: #d9d9d9; }
 
     .hero {
       background: #0d1d44;
@@ -165,6 +197,24 @@
 </head>
 <body>
 
+  <div class="sidebar">
+    <a href="index.html"><button>Home</button></a>
+    <a href="dashboard.html"><button>Dashboard</button></a>
+    <a href="events.html"><button>Events</button></a>
+    <a href="volunteer.html"><button>Volunteer</button></a>
+    <a href="jobs.html"><button>Open Jobs</button></a>
+    <a href="appointments.html"><button>Appointments</button></a>
+    <a href="families.html"><button>Families</button></a>
+    <a href="success.html"><button>Success Stories</button></a>
+    <a href="health.html"><button>Health Info</button></a>
+    <a href="background.html"><button>Background Check</button></a>
+    <a href="newsletter.html"><button>Newsletter</button></a>
+    <a href="help.html"><button>Help</button></a>
+    <a href="contact.html"><button>Contact</button></a>
+    <a href="login.html"><button>Login</button></a>
+    <button onclick="alert('Logout')">Logout</button>
+  </div>
+
   <section class="hero">
     <h1>Job Listings</h1>
     <p>Explore openings and apply to join our team at Special Space</p>
@@ -182,7 +232,7 @@
           <p>Engineering • Remote</p>
           <p>Build and maintain web applications and internal tools.</p>
         </div>
-        <a href="software-developer.html" class="btn btn-view">View</a>
+        <button type="button" class="btn btn-view" onclick="applyFor('Software Developer')">Apply</button>
       </div>
 
       <div class="job-item">
@@ -191,7 +241,7 @@
           <p>Security • Las Vegas</p>
           <p>Monitor systems and support incident response workflows.</p>
         </div>
-        <a href="cybersecurity-analyst.html" class="btn btn-view">View</a>
+        <button type="button" class="btn btn-view" onclick="applyFor('Cybersecurity Analyst')">Apply</button>
       </div>
 
       <div class="job-item">
@@ -200,17 +250,21 @@
           <p>Analytics • Hybrid</p>
           <p>Analyze trends and create reports to support decisions.</p>
         </div>
-        <a href="data-analyst.html" class="btn btn-view">View</a>
+        <button type="button" class="btn btn-view" onclick="applyFor('Data Analyst')">Apply</button>
       </div>
 
       <a href="index.html" class="btn btn-home">Back Home</a>
     </div>
 
     <!-- RIGHT SIDE -->
-    <div class="card">
+    <div class="card" id="applyCard">
       <h2>Apply Now</h2>
 
-      <form>
+      <div id="applyConfirmation" style="display:none; background:#1a4d1a; padding:12px; border-radius:8px; margin-bottom:16px;">
+        Application submitted. Thanks for applying!
+      </div>
+
+      <form id="applyForm">
         <div class="form-group">
           <label for="fullname">Full Name *</label>
           <input type="text" id="fullname" placeholder="Enter your full name" required>
@@ -251,6 +305,52 @@
     </div>
 
   </div>
+
+  <script>
+    var APPLICATIONS_KEY = "special_space_job_applications_v1";
+
+    function applyFor(position) {
+      document.getElementById("position").value = position;
+      document.getElementById("applyCard").scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("fullname").focus();
+    }
+
+    document.getElementById("applyForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      var application = {
+        id: (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+        fullname: document.getElementById("fullname").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        position: document.getElementById("position").value,
+        resume: document.getElementById("resume").value.trim(),
+        message: document.getElementById("message").value.trim(),
+        submittedAt: Date.now()
+      };
+
+      if (!application.fullname || !application.email || !application.position) {
+        alert("Please fill out name, email, and position.");
+        return;
+      }
+
+      var existing = [];
+      try {
+        var raw = localStorage.getItem(APPLICATIONS_KEY);
+        existing = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(existing)) existing = [];
+      } catch (err) {
+        existing = [];
+      }
+      existing.push(application);
+      localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(existing));
+
+      this.reset();
+      var conf = document.getElementById("applyConfirmation");
+      conf.style.display = "block";
+      setTimeout(function() { conf.style.display = "none"; }, 4000);
+    });
+  </script>
 
 </body>
 </html>

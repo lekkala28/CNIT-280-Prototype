@@ -9,8 +9,39 @@
       font-family: Arial, sans-serif;
       background: #f4f7fb;
       margin: 0;
-      padding: 0;
+      padding: 0 0 0 220px;
     }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100%;
+      background-color: black;
+      padding-top: 20px;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .sidebar a { text-decoration: none; }
+
+    .sidebar button {
+      display: block;
+      width: 80%;
+      margin: 10px auto;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    .sidebar button:hover { background-color: #d9d9d9; }
 
     .page-wrap {
       width: 90%;
@@ -157,6 +188,24 @@
   </style>
 </head>
 <body>
+  <div class="sidebar">
+    <a href="index.html"><button>Home</button></a>
+    <a href="dashboard.html"><button>Dashboard</button></a>
+    <a href="events.html"><button>Events</button></a>
+    <a href="volunteer.html"><button>Volunteer</button></a>
+    <a href="jobs.html"><button>Open Jobs</button></a>
+    <a href="appointments.html"><button>Appointments</button></a>
+    <a href="families.html"><button>Families</button></a>
+    <a href="success.html"><button>Success Stories</button></a>
+    <a href="health.html"><button>Health Info</button></a>
+    <a href="background.html"><button>Background Check</button></a>
+    <a href="newsletter.html"><button>Newsletter</button></a>
+    <a href="help.html"><button>Help</button></a>
+    <a href="contact.html"><button>Contact</button></a>
+    <a href="login.html"><button>Login</button></a>
+    <button onclick="alert('Logout')">Logout</button>
+  </div>
+
   <div class="page-wrap">
     <div class="container">
       <h1>Available Appointments</h1>
@@ -196,7 +245,18 @@
 
   <script>
     var SLOTS_KEY = "special_space_slots_v1";
-    var APPTS_KEY = "appointments";
+    var APPTS_KEY = "special_space_appointments_v1";
+
+    // Migrate from the old non-namespaced "appointments" key if present.
+    (function migrateAppointmentsKey() {
+      var legacy = localStorage.getItem("appointments");
+      if (legacy && !localStorage.getItem(APPTS_KEY)) {
+        localStorage.setItem(APPTS_KEY, legacy);
+      }
+      if (legacy) {
+        localStorage.removeItem("appointments");
+      }
+    })();
 
     var defaultSlots = [
       { id: "s1", date: "2026-03-16", time: "09:00", provider: "Dr. Ramirez", type: "Initial Consultation" },
