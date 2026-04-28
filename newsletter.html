@@ -2,9 +2,7 @@
 <html>
 <head>
   <title>Newsletter | Special Space</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-
   <style>
     body {
       margin: 0;
@@ -12,7 +10,6 @@
       background-color: #1a0033;
       color: white;
     }
-
     .sidebar {
       position: fixed;
       left: 0;
@@ -23,9 +20,7 @@
       padding-top: 20px;
       overflow-y: auto;
     }
-
     .sidebar a { text-decoration: none; }
-
     .sidebar button {
       display: block;
       width: 80%;
@@ -39,15 +34,12 @@
       cursor: pointer;
       font-family: Arial, sans-serif;
     }
-
     .sidebar button:hover { background-color: #d9d9d9; }
-
     .main {
       margin-left: 220px;
       padding: 40px;
       max-width: 950px;
     }
-
     h1 {
       font-family: 'Orbitron', sans-serif;
       font-size: 42px;
@@ -55,14 +47,12 @@
       margin-bottom: 10px;
       letter-spacing: 3px;
     }
-
     .intro {
       text-align: center;
       font-size: 18px;
       margin-bottom: 30px;
       line-height: 1.6;
     }
-
     .section-title {
       font-size: 26px;
       margin-top: 40px;
@@ -70,26 +60,26 @@
       border-bottom: 2px solid #ffffff44;
       padding-bottom: 6px;
     }
-
     .card {
       background: #2a0055;
       padding: 18px;
       border-radius: 12px;
       margin-bottom: 18px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: transform 0.15s;
     }
-
+    .card.no-hover { cursor: default; }
+    .card:not(.no-hover):hover { transform: translateY(-2px); }
     .card h3 {
       margin-top: 0;
       font-size: 20px;
     }
-
     .info {
       font-size: 16px;
       margin: 6px 0;
       line-height: 1.5;
     }
-
     .event-date {
       display: inline-block;
       background: white;
@@ -100,25 +90,22 @@
       margin-bottom: 10px;
       font-size: 16px;
     }
-
     .event-meta {
       font-size: 14px;
       color: #ccc;
       margin: 4px 0 8px 0;
     }
-
     .highlight-card {
       background: #3a0077;
       border-left: 5px solid #a855f7;
+      cursor: default;
     }
-
     .subscribe-form {
       display: flex;
       gap: 10px;
       margin-top: 20px;
       flex-wrap: wrap;
     }
-
     .subscribe-form input {
       flex: 1;
       min-width: 200px;
@@ -127,7 +114,6 @@
       border: none;
       font-size: 16px;
     }
-
     .subscribe-form button {
       padding: 12px 24px;
       border-radius: 8px;
@@ -138,11 +124,7 @@
       cursor: pointer;
       font-size: 16px;
     }
-
-    .subscribe-form button:hover {
-      background: #d9d9d9;
-    }
-
+    .subscribe-form button:hover { background: #d9d9d9; }
     .search-input {
       width: 100%;
       max-width: 350px;
@@ -152,7 +134,6 @@
       font-size: 16px;
       margin-bottom: 0;
     }
-
     .filter-bar {
       display: flex;
       align-items: center;
@@ -160,13 +141,11 @@
       flex-wrap: wrap;
       margin-bottom: 20px;
     }
-
     .filter-buttons {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
-
     .filter-btn {
       padding: 8px 16px;
       border-radius: 8px;
@@ -177,19 +156,48 @@
       cursor: pointer;
       font-size: 14px;
     }
-
-    .filter-btn:hover {
-      background: #ffffff22;
-    }
-
+    .filter-btn:hover { background: #ffffff22; }
     .filter-btn.active {
       background: white;
       color: #1a0033;
       border-color: white;
     }
+    .empty-msg {
+      opacity: 0.85;
+      font-style: italic;
+      padding: 8px 0;
+    }
+    .detail-card {
+      background: #2a0055;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      margin-bottom: 18px;
+    }
+    .back-btn {
+      background: white;
+      color: #1a0033;
+      font-weight: bold;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .back-btn:hover { background: #d9d9d9; }
+    .detail-row {
+      padding: 8px 0;
+      border-bottom: 1px solid #ffffff22;
+      font-size: 16px;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label {
+      font-weight: bold;
+      display: inline-block;
+      min-width: 130px;
+    }
   </style>
 </head>
-
 <body>
 
   <div class="sidebar">
@@ -215,131 +223,297 @@
     <h1>Newsletter</h1>
 
     <div class="intro">
-      Stay updated with upcoming events, helpful tips, and fun highlights from the community.
+      Stay updated with upcoming events, job opportunities, and community announcements.
     </div>
 
-    <div class="filter-bar">
-      <input type="text" class="search-input" placeholder="Search..." id="eventSearch" oninput="filterContent()">
-      <div class="filter-buttons">
-        <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
-        <button class="filter-btn" data-filter="events" onclick="setFilter('events')">Events</button>
-        <button class="filter-btn" data-filter="highlights" onclick="setFilter('highlights')">Highlights</button>
-        <button class="filter-btn" data-filter="subscribe" onclick="setFilter('subscribe')">Subscribe</button>
+    <!-- ============ NEWSLETTER VIEW ============ -->
+    <div id="newsletterView">
+
+      <div class="filter-bar">
+        <input type="text" class="search-input" placeholder="Search..." id="eventSearch" oninput="filterContent()">
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
+          <button class="filter-btn" data-filter="events" onclick="setFilter('events')">Events</button>
+          <button class="filter-btn" data-filter="jobs" onclick="setFilter('jobs')">Jobs</button>
+          <button class="filter-btn" data-filter="highlights" onclick="setFilter('highlights')">Highlights</button>
+          <button class="filter-btn" data-filter="subscribe" onclick="setFilter('subscribe')">Subscribe</button>
+        </div>
+      </div>
+
+      <div class="content-section" data-type="events">
+        <div class="section-title">Upcoming Events</div>
+        <div id="eventList"></div>
+        <div id="eventsEmpty" class="empty-msg" style="display:none;">No upcoming events at this time.</div>
+      </div>
+
+      <div class="content-section" data-type="jobs">
+        <div class="section-title">Job Opportunities</div>
+        <div id="jobList"></div>
+        <div id="jobsEmpty" class="empty-msg" style="display:none;">No job opportunities are currently available.</div>
+      </div>
+
+      <div class="content-section" data-type="highlights">
+        <div class="section-title">Highlights</div>
+
+        <div class="card highlight-card no-hover">
+          <h3>Spotlight Story</h3>
+          <div class="info">This month we are celebrating community members who turned simple ideas into real projects through teamwork and consistency.</div>
+        </div>
+
+        <div class="card highlight-card no-hover">
+          <h3>Quick Tip</h3>
+          <div class="info">Try planning your week every Sunday night. Even a 10-minute reset can make deadlines feel easier to manage.</div>
+        </div>
+
+        <div class="card highlight-card no-hover">
+          <h3>Did You Know?</h3>
+          <div class="info">Our community has added three new student-led clubs this semester, giving more chances to build skills and meet people.</div>
+        </div>
+      </div>
+
+      <div class="content-section" data-type="subscribe">
+        <div class="section-title">Subscribe</div>
+
+        <div class="card no-hover">
+          <h3>Get the Newsletter in Your Inbox</h3>
+          <div class="info">Sign up to receive monthly updates about events, jobs, and community highlights.</div>
+          <div class="subscribe-form">
+            <input type="email" id="subscribeEmail" placeholder="Enter your email address">
+            <button onclick="subscribe()">Subscribe</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="content-section" data-type="events">
-    <div class="section-title">Upcoming Events</div>
-
-    <div id="eventList">
-      <div class="card event-card">
-        <span class="event-date">Apr 18</span>
-        <h3>Spring Networking Night</h3>
-        <div class="event-meta">6:00 PM - 8:00 PM | Innovation Hall</div>
-        <div class="info">Meet students, alumni, and local professionals for an evening of conversations and opportunities.</div>
-      </div>
-
-      <div class="card event-card">
-        <span class="event-date">Apr 24</span>
-        <h3>AI Workshop Live</h3>
-        <div class="event-meta">4:30 PM - 6:00 PM | Tech Lab 204</div>
-        <div class="info">A hands-on session covering simple AI tools, prompts, and practical ways to use them in class projects.</div>
-      </div>
-
-      <div class="card event-card">
-        <span class="event-date">May 2</span>
-        <h3>Community Game Night</h3>
-        <div class="event-meta">7:00 PM - 9:00 PM | Student Center Lounge</div>
-        <div class="info">Take a break, play games, and connect with friends in a relaxed social setting.</div>
-      </div>
-    </div>
-    </div>
-
-    <div class="content-section" data-type="highlights">
-    <div class="section-title">Highlights</div>
-
-    <div class="card highlight-card">
-      <h3>Spotlight Story</h3>
-      <div class="info">This month we are celebrating students who turned simple ideas into real projects through teamwork, curiosity, and consistency.</div>
-    </div>
-
-    <div class="card highlight-card">
-      <h3>Quick Tip</h3>
-      <div class="info">Try planning your week every Sunday night. Even a 10-minute reset can make deadlines feel easier to manage.</div>
-    </div>
-
-    <div class="card highlight-card">
-      <h3>Did You Know?</h3>
-      <div class="info">Our community has added three new student-led clubs this semester, giving more chances to build skills and meet people.</div>
-    </div>
-
-    </div>
-
-    <div class="content-section" data-type="subscribe">
-    <div class="section-title">Subscribe</div>
-
-    <div class="card">
-      <h3>Get the Newsletter in Your Inbox</h3>
-      <div class="info">Sign up to receive monthly updates about events, tips, and community highlights.</div>
-      <div class="subscribe-form">
-        <input type="email" id="subscribeEmail" placeholder="Enter your email address">
-        <button onclick="subscribe()">Subscribe</button>
-      </div>
-    </div>
+    <!-- ============ DETAIL VIEW ============ -->
+    <div id="detailView" style="display:none;">
+      <button class="back-btn" onclick="showNewsletter()">Back to Newsletter</button>
+      <div id="detailContent"></div>
     </div>
 
   </div>
 
   <script>
-    var activeFilter = 'all';
+    var EVENTS_KEY = "special_space_newsletter_events_v1";
+    var JOBS_KEY = "special_space_jobs_v1";
+
+    var defaultEvents = [
+      {
+        id: "ne1",
+        title: "Spring Networking Night",
+        date: "Apr 18",
+        time: "6:00 PM - 8:00 PM",
+        location: "Innovation Hall",
+        description: "Meet community members, alumni, and local professionals for an evening of conversation and opportunities.",
+        ageRange: "18+",
+        cost: "Free",
+        contact: "events@specialspace.org"
+      },
+      {
+        id: "ne2",
+        title: "Sensory-Friendly Story Time",
+        date: "Apr 24",
+        time: "4:30 PM - 5:30 PM",
+        location: "Whispering Hills Library, Story Room",
+        description: "A calm, welcoming story time designed for children with sensory sensitivities. Soft lighting, low volume, fidget toys provided.",
+        ageRange: "3-10",
+        cost: "Free",
+        contact: "library@whlibrary.org"
+      },
+      {
+        id: "ne3",
+        title: "Community Game Night",
+        date: "May 2",
+        time: "7:00 PM - 9:00 PM",
+        location: "Student Center Lounge",
+        description: "Take a break, play games, and connect with friends in a relaxed social setting. Adaptive games available.",
+        ageRange: "All ages",
+        cost: "Free",
+        contact: "events@specialspace.org"
+      }
+    ];
+
+    var activeFilter = "all";
+    var newsletterEvents = [];
 
     function escapeHtml(str) {
-      var div = document.createElement('div');
-      div.appendChild(document.createTextNode(str));
-      return div.innerHTML;
+      return String(str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function loadJSON(key, fallback) {
+      try {
+        var raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        var parsed = JSON.parse(raw);
+        return parsed != null ? parsed : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function loadEvents() {
+      var stored = loadJSON(EVENTS_KEY, null);
+      if (!stored || !Array.isArray(stored) || stored.length === 0) {
+        localStorage.setItem(EVENTS_KEY, JSON.stringify(defaultEvents));
+        return defaultEvents.slice();
+      }
+      return stored;
+    }
+
+    function loadJobs() {
+      return loadJSON(JOBS_KEY, []);
     }
 
     function setFilter(filter) {
       activeFilter = filter;
-      var buttons = document.querySelectorAll('.filter-btn');
+      var buttons = document.querySelectorAll(".filter-btn");
       for (var i = 0; i < buttons.length; i++) {
-        if (buttons[i].getAttribute('data-filter') === filter) {
-          buttons[i].classList.add('active');
-        } else {
-          buttons[i].classList.remove('active');
-        }
+        buttons[i].classList.toggle("active", buttons[i].getAttribute("data-filter") === filter);
       }
       filterContent();
     }
 
     function filterContent() {
-      var query = document.getElementById('eventSearch').value.toLowerCase();
-      var sections = document.querySelectorAll('.content-section');
+      var query = document.getElementById("eventSearch").value.toLowerCase();
+      var sections = document.querySelectorAll(".content-section");
       for (var i = 0; i < sections.length; i++) {
-        var type = sections[i].getAttribute('data-type');
-        var matchesFilter = activeFilter === 'all' || type === activeFilter;
+        var type = sections[i].getAttribute("data-type");
+        var matchesFilter = activeFilter === "all" || type === activeFilter;
         if (!matchesFilter) {
-          sections[i].style.display = 'none';
+          sections[i].style.display = "none";
           continue;
         }
-        sections[i].style.display = '';
-        var cards = sections[i].querySelectorAll('.card');
+        sections[i].style.display = "";
+        var cards = sections[i].querySelectorAll(".card");
         for (var j = 0; j < cards.length; j++) {
           var text = cards[j].textContent.toLowerCase();
-          cards[j].style.display = text.includes(query) ? '' : 'none';
+          cards[j].style.display = text.indexOf(query) >= 0 ? "" : "none";
         }
       }
     }
 
-    function subscribe() {
-      var email = document.getElementById('subscribeEmail').value.trim();
-      if (!email) {
-        alert('Please enter an email address.');
+    function renderEvents() {
+      newsletterEvents = loadEvents();
+      var container = document.getElementById("eventList");
+      var empty = document.getElementById("eventsEmpty");
+      container.innerHTML = "";
+
+      if (newsletterEvents.length === 0) {
+        empty.style.display = "block";
         return;
       }
-      alert('Thanks for subscribing! You will receive updates at ' + escapeHtml(email) + '.');
-      document.getElementById('subscribeEmail').value = '';
+      empty.style.display = "none";
+
+      newsletterEvents.forEach(function(ev) {
+        var card = document.createElement("div");
+        card.className = "card";
+        card.onclick = (function(id) { return function() { showEventDetail(id); }; })(ev.id);
+        card.innerHTML =
+          '<span class="event-date">' + escapeHtml(ev.date) + '</span>' +
+          '<h3>' + escapeHtml(ev.title) + '</h3>' +
+          '<div class="event-meta">' + escapeHtml(ev.time) + ' | ' + escapeHtml(ev.location) + '</div>' +
+          '<div class="info">' + escapeHtml(ev.description) + '</div>';
+        container.appendChild(card);
+      });
     }
+
+    function renderJobs() {
+      var jobs = loadJobs();
+      var container = document.getElementById("jobList");
+      var empty = document.getElementById("jobsEmpty");
+      container.innerHTML = "";
+
+      if (!jobs || jobs.length === 0) {
+        empty.style.display = "block";
+        return;
+      }
+      empty.style.display = "none";
+
+      jobs.sort(function(a, b) {
+        return (b.createdAt || 0) - (a.createdAt || 0);
+      });
+
+      jobs.forEach(function(job) {
+        var card = document.createElement("div");
+        card.className = "card";
+        card.onclick = (function(id) { return function() { showJobDetail(id); }; })(job.id);
+        card.innerHTML =
+          '<h3>' + escapeHtml(job.title) + '</h3>' +
+          '<div class="event-meta">' + escapeHtml(job.company) + (job.compensation ? ' | ' + escapeHtml(job.compensation) : '') + '</div>' +
+          '<div class="info">' + escapeHtml(job.description) + '</div>';
+        container.appendChild(card);
+      });
+    }
+
+    function showEventDetail(id) {
+      var ev = null;
+      for (var i = 0; i < newsletterEvents.length; i++) {
+        if (newsletterEvents[i].id === id) { ev = newsletterEvents[i]; break; }
+      }
+      if (!ev) return;
+
+      document.getElementById("newsletterView").style.display = "none";
+      document.getElementById("detailView").style.display = "block";
+      document.getElementById("detailContent").innerHTML =
+        '<div class="detail-card">' +
+          '<h2>' + escapeHtml(ev.title) + '</h2>' +
+          '<div class="detail-row"><span class="detail-label">Date:</span> ' + escapeHtml(ev.date) + '</div>' +
+          '<div class="detail-row"><span class="detail-label">Time:</span> ' + escapeHtml(ev.time) + '</div>' +
+          '<div class="detail-row"><span class="detail-label">Location:</span> ' + escapeHtml(ev.location) + '</div>' +
+          '<div class="detail-row"><span class="detail-label">Description:</span> ' + escapeHtml(ev.description) + '</div>' +
+          '<div class="detail-row"><span class="detail-label">Age Range:</span> ' + escapeHtml(ev.ageRange) + '</div>' +
+          '<div class="detail-row"><span class="detail-label">Cost:</span> ' + escapeHtml(ev.cost) + '</div>' +
+          '<div class="detail-row"><span class="detail-label">Contact:</span> ' + escapeHtml(ev.contact) + '</div>' +
+        '</div>';
+      window.scrollTo(0, 0);
+    }
+
+    function showJobDetail(id) {
+      var jobs = loadJobs();
+      var job = null;
+      for (var i = 0; i < jobs.length; i++) {
+        if (jobs[i].id === id) { job = jobs[i]; break; }
+      }
+      if (!job) return;
+
+      document.getElementById("newsletterView").style.display = "none";
+      document.getElementById("detailView").style.display = "block";
+      document.getElementById("detailContent").innerHTML =
+        '<div class="detail-card">' +
+          '<h2>' + escapeHtml(job.title) + '</h2>' +
+          '<div class="detail-row"><span class="detail-label">Company:</span> ' + escapeHtml(job.company) + '</div>' +
+          '<div class="detail-row"><span class="detail-label">Description:</span> ' + escapeHtml(job.description) + '</div>' +
+          (job.compensation ? '<div class="detail-row"><span class="detail-label">Compensation:</span> ' + escapeHtml(job.compensation) + '</div>' : '') +
+          '<div class="detail-row"><span class="detail-label">Contact:</span> ' + escapeHtml(job.email) + '</div>' +
+          '<div class="detail-row"><span class="detail-label">Posted:</span> ' + new Date(job.createdAt).toLocaleString() + '</div>' +
+          '<div style="margin-top:16px;"><a href="jobs.html" style="color:#fff; text-decoration:underline;">Apply on the Open Jobs page</a></div>' +
+        '</div>';
+      window.scrollTo(0, 0);
+    }
+
+    function showNewsletter() {
+      document.getElementById("detailView").style.display = "none";
+      document.getElementById("newsletterView").style.display = "block";
+      window.scrollTo(0, 0);
+    }
+
+    function subscribe() {
+      var email = document.getElementById("subscribeEmail").value.trim();
+      if (!email) {
+        alert("Please enter an email address.");
+        return;
+      }
+      alert("Thanks for subscribing. You will receive updates at " + email + ".");
+      document.getElementById("subscribeEmail").value = "";
+    }
+
+    renderEvents();
+    renderJobs();
   </script>
 
 </body>

@@ -2,9 +2,7 @@
 <html>
 <head>
   <title>Open Jobs | Special Space</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-
   <style>
     body {
       margin: 0;
@@ -12,7 +10,6 @@
       background-color: #1a0033;
       color: white;
     }
-
     .sidebar {
       position: fixed;
       left: 0;
@@ -23,11 +20,7 @@
       padding-top: 20px;
       overflow-y: auto;
     }
-
-    .sidebar a {
-      text-decoration: none;
-    }
-
+    .sidebar a { text-decoration: none; }
     .sidebar button {
       display: block;
       width: 80%;
@@ -41,17 +34,12 @@
       cursor: pointer;
       font-family: Arial, sans-serif;
     }
-
-    .sidebar button:hover {
-      background-color: #d9d9d9;
-    }
-
+    .sidebar button:hover { background-color: #d9d9d9; }
     .main {
       margin-left: 220px;
       padding: 40px;
       max-width: 950px;
     }
-
     h1 {
       font-family: 'Orbitron', sans-serif;
       font-size: 42px;
@@ -59,14 +47,12 @@
       text-align: center;
       margin-bottom: 10px;
     }
-
     .intro {
       text-align: center;
       font-size: 18px;
       margin-bottom: 30px;
       line-height: 1.6;
     }
-
     .card {
       background: #2a0055;
       padding: 20px;
@@ -74,19 +60,14 @@
       margin-bottom: 20px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
-
-    .card h3 {
-      margin-top: 0;
-    }
-
+    .card h3 { margin-top: 0; }
     label {
       display: block;
       margin-top: 12px;
       font-size: 15px;
       font-weight: bold;
     }
-
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 10px;
       margin-top: 6px;
@@ -97,19 +78,17 @@
       font-family: Arial, sans-serif;
       font-size: 14px;
     }
-
     textarea {
       min-height: 100px;
       resize: vertical;
     }
-
-    input.invalid, textarea.invalid {
+    input.invalid, textarea.invalid, select.invalid {
       border: 2px solid #ff4d4d;
     }
-
     .action-btn {
       display: inline-block;
       margin-top: 16px;
+      margin-right: 8px;
       padding: 12px 16px;
       background: white;
       color: black;
@@ -119,11 +98,12 @@
       cursor: pointer;
       font-size: 14px;
     }
-
-    .action-btn:hover {
-      background: #d9d9d9;
+    .action-btn:hover { background: #d9d9d9; }
+    .apply-btn {
+      background: #6f42c1;
+      color: white;
     }
-
+    .apply-btn:hover { background: #5a32a3; }
     .delete-btn {
       background: #ff4d4d;
       color: white;
@@ -133,7 +113,6 @@
       cursor: pointer;
       margin-top: 10px;
     }
-
     .clear-btn {
       background: #ff4d4d;
       color: white;
@@ -144,23 +123,17 @@
       cursor: pointer;
       margin-top: 10px;
     }
-
-    .clear-btn:hover {
-      opacity: 0.95;
-    }
-
+    .clear-btn:hover { opacity: 0.95; }
     .info {
       font-size: 15px;
       margin: 4px 0;
       line-height: 1.5;
     }
-
     .meta {
       font-size: 13px;
       opacity: 0.85;
       margin-top: 8px;
     }
-
     .confirmation {
       display: none;
       background: #1a4d1a;
@@ -170,16 +143,39 @@
       margin-bottom: 20px;
       font-size: 16px;
     }
-
     .empty-msg {
       text-align: center;
       font-size: 16px;
       opacity: 0.85;
       margin: 20px 0;
     }
+    .job-details {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #ffffff33;
+    }
+    .job-details.open { display: block; }
+    .apply-form {
+      display: none;
+      margin-top: 12px;
+      padding: 16px;
+      background: #140026;
+      border-radius: 10px;
+    }
+    .apply-form.open { display: block; }
+    .row-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .row-buttons .action-btn,
+    .row-buttons .delete-btn {
+      margin-top: 0;
+    }
   </style>
 </head>
-
 <body>
 
   <div class="sidebar">
@@ -206,11 +202,15 @@
 
     <div class="intro">
       Browse available job postings from local employers in the Whispering Hills community.
-      Employers can add new listings using the form below.
+      Caregivers can apply on behalf of users they support. Employers can add new listings.
     </div>
 
     <div id="confirmation" class="confirmation">
       Job posting submitted successfully!
+    </div>
+
+    <div id="applyConfirmation" class="confirmation">
+      Application submitted successfully! The coordinator and employer have been notified.
     </div>
 
     <button class="action-btn" id="toggleFormBtn" onclick="toggleForm()">Add Job Posting</button>
@@ -243,7 +243,7 @@
     <h2 style="margin-top: 30px; font-family: 'Orbitron', sans-serif; font-size: 24px; letter-spacing: 2px;">Current Listings</h2>
 
     <div id="jobsList"></div>
-    <div id="emptyMsg" class="empty-msg" style="display:none;">No job postings yet. Be the first to add one!</div>
+    <div id="emptyMsg" class="empty-msg" style="display:none;">No job opportunities are currently available.</div>
 
     <button class="clear-btn" onclick="clearAllJobs()">Clear All Postings</button>
 
@@ -251,6 +251,28 @@
 
 <script>
 var JOBS_KEY = "special_space_jobs_v1";
+var APPLICATIONS_KEY = "special_space_job_applications_v1";
+
+var defaultJobs = [
+  {
+    id: "j1",
+    title: "Adaptive Sports Assistant",
+    company: "Whispering Hills Recreation Center",
+    description: "Support coaches running adaptive basketball and swim sessions for youth with disabilities. No prior experience required, training provided.",
+    compensation: "$16/hr",
+    email: "hiring@whrec.org",
+    createdAt: Date.now() - 86400000
+  },
+  {
+    id: "j2",
+    title: "Library Page (Inclusive Programs)",
+    company: "Whispering Hills Library",
+    description: "Shelve books and assist with sensory-friendly story time programs. Great for individuals seeking a quiet, structured environment.",
+    compensation: "$15/hr",
+    email: "jobs@whlibrary.org",
+    createdAt: Date.now() - 172800000
+  }
+];
 
 function escapeHtml(str) {
   return String(str || "")
@@ -264,7 +286,11 @@ function escapeHtml(str) {
 function loadJobs() {
   try {
     var raw = localStorage.getItem(JOBS_KEY);
-    var parsed = raw ? JSON.parse(raw) : [];
+    if (!raw) {
+      saveJobs(defaultJobs);
+      return defaultJobs.slice();
+    }
+    var parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
   } catch (e) {
     return [];
@@ -273,6 +299,20 @@ function loadJobs() {
 
 function saveJobs(jobs) {
   localStorage.setItem(JOBS_KEY, JSON.stringify(jobs));
+}
+
+function loadApplications() {
+  try {
+    var raw = localStorage.getItem(APPLICATIONS_KEY);
+    var parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveApplications(apps) {
+  localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(apps));
 }
 
 function toggleForm() {
@@ -284,28 +324,26 @@ function toggleForm() {
   } else {
     section.style.display = "none";
     btn.textContent = "Add Job Posting";
-    clearValidation();
+    clearValidation("jobForm");
   }
 }
 
-function clearValidation() {
-  var inputs = document.querySelectorAll("#jobForm input, #jobForm textarea");
+function clearValidation(formId) {
+  var inputs = document.querySelectorAll("#" + formId + " input, #" + formId + " textarea, #" + formId + " select");
   for (var i = 0; i < inputs.length; i++) {
     inputs[i].classList.remove("invalid");
   }
 }
 
-function showConfirmation() {
-  var el = document.getElementById("confirmation");
+function showConfirmation(id) {
+  var el = document.getElementById(id);
   el.style.display = "block";
-  setTimeout(function() {
-    el.style.display = "none";
-  }, 4000);
+  setTimeout(function() { el.style.display = "none"; }, 4000);
 }
 
 document.getElementById("jobForm").addEventListener("submit", function(e) {
   e.preventDefault();
-  clearValidation();
+  clearValidation("jobForm");
 
   var titleEl = document.getElementById("jobTitle");
   var companyEl = document.getElementById("companyName");
@@ -320,23 +358,10 @@ document.getElementById("jobForm").addEventListener("submit", function(e) {
   var email = emailEl.value.trim();
 
   var valid = true;
-
-  if (!title) {
-    titleEl.classList.add("invalid");
-    valid = false;
-  }
-  if (!company) {
-    companyEl.classList.add("invalid");
-    valid = false;
-  }
-  if (!description) {
-    descEl.classList.add("invalid");
-    valid = false;
-  }
-  if (!email) {
-    emailEl.classList.add("invalid");
-    valid = false;
-  }
+  if (!title) { titleEl.classList.add("invalid"); valid = false; }
+  if (!company) { companyEl.classList.add("invalid"); valid = false; }
+  if (!description) { descEl.classList.add("invalid"); valid = false; }
+  if (!email) { emailEl.classList.add("invalid"); valid = false; }
 
   if (!valid) {
     alert("Please complete all required fields before submitting.");
@@ -365,7 +390,7 @@ document.getElementById("jobForm").addEventListener("submit", function(e) {
   document.getElementById("formSection").style.display = "none";
   document.getElementById("toggleFormBtn").textContent = "Add Job Posting";
 
-  showConfirmation();
+  showConfirmation("confirmation");
   renderJobs();
 });
 
@@ -383,6 +408,83 @@ function clearAllJobs() {
   }
 }
 
+function toggleDetails(id) {
+  var el = document.getElementById("details-" + id);
+  if (!el) return;
+  el.classList.toggle("open");
+}
+
+function toggleApply(id) {
+  var el = document.getElementById("apply-" + id);
+  if (!el) return;
+  var isOpen = el.classList.toggle("open");
+  if (isOpen) {
+    var detailsEl = document.getElementById("details-" + id);
+    if (detailsEl) detailsEl.classList.add("open");
+  }
+}
+
+function submitApplication(jobId) {
+  var nameEl = document.getElementById("appName-" + jobId);
+  var emailEl = document.getElementById("appEmail-" + jobId);
+  var phoneEl = document.getElementById("appPhone-" + jobId);
+  var qualEl = document.getElementById("appQual-" + jobId);
+  var availEl = document.getElementById("appAvail-" + jobId);
+
+  [nameEl, emailEl, phoneEl, qualEl, availEl].forEach(function(el) {
+    if (el) el.classList.remove("invalid");
+  });
+
+  var name = nameEl.value.trim();
+  var email = emailEl.value.trim();
+  var phone = phoneEl.value.trim();
+  var qualifications = qualEl.value.trim();
+  var availability = availEl.value.trim();
+
+  var valid = true;
+  if (!name) { nameEl.classList.add("invalid"); valid = false; }
+  if (!email) { emailEl.classList.add("invalid"); valid = false; }
+  if (!qualifications) { qualEl.classList.add("invalid"); valid = false; }
+  if (!availability) { availEl.classList.add("invalid"); valid = false; }
+
+  if (!valid) {
+    alert("Please complete all required fields before submitting.");
+    return;
+  }
+
+  var jobs = loadJobs();
+  var job = null;
+  for (var i = 0; i < jobs.length; i++) {
+    if (jobs[i].id === jobId) { job = jobs[i]; break; }
+  }
+
+  var apps = loadApplications();
+  apps.push({
+    id: (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+    jobId: jobId,
+    jobTitle: job ? job.title : "",
+    company: job ? job.company : "",
+    fullname: name,
+    email: email,
+    phone: phone,
+    qualifications: qualifications,
+    availability: availability,
+    submittedAt: Date.now()
+  });
+  saveApplications(apps);
+
+  nameEl.value = "";
+  emailEl.value = "";
+  phoneEl.value = "";
+  qualEl.value = "";
+  availEl.value = "";
+
+  var formEl = document.getElementById("apply-" + jobId);
+  if (formEl) formEl.classList.remove("open");
+
+  showConfirmation("applyConfirmation");
+}
+
 function renderJobs() {
   var jobs = loadJobs();
   var listEl = document.getElementById("jobsList");
@@ -394,7 +496,6 @@ function renderJobs() {
     emptyEl.style.display = "block";
     return;
   }
-
   emptyEl.style.display = "none";
 
   jobs.sort(function(a, b) {
@@ -406,14 +507,36 @@ function renderJobs() {
     var div = document.createElement("div");
     div.className = "card";
 
+    var idAttr = escapeHtml(j.id);
+
     div.innerHTML =
       "<h3>" + escapeHtml(j.title) + "</h3>" +
       "<div class='info'><strong>Company:</strong> " + escapeHtml(j.company) + "</div>" +
       "<div class='info'>" + escapeHtml(j.description) + "</div>" +
       (j.compensation ? "<div class='info'><strong>Compensation:</strong> " + escapeHtml(j.compensation) + "</div>" : "") +
-      "<div class='info'><strong>Contact:</strong> " + escapeHtml(j.email) + "</div>" +
       "<div class='meta'>Posted: " + new Date(j.createdAt).toLocaleString() + "</div>" +
-      "<button class='delete-btn' onclick=\"deleteJob('" + j.id + "')\">Delete</button>";
+      "<div id='details-" + idAttr + "' class='job-details'>" +
+        "<div class='info'><strong>Contact:</strong> " + escapeHtml(j.email) + "</div>" +
+      "</div>" +
+      "<div id='apply-" + idAttr + "' class='apply-form'>" +
+        "<h3 style='margin-top:0;'>Apply for this Job</h3>" +
+        "<label>Name *</label>" +
+        "<input id='appName-" + idAttr + "' type='text' placeholder='Applicant full name' />" +
+        "<label>Email *</label>" +
+        "<input id='appEmail-" + idAttr + "' type='email' placeholder='you@email.com' />" +
+        "<label>Phone</label>" +
+        "<input id='appPhone-" + idAttr + "' type='tel' placeholder='(555) 123-4567' />" +
+        "<label>Qualifications *</label>" +
+        "<textarea id='appQual-" + idAttr + "' placeholder='Relevant experience, certifications, or skills...'></textarea>" +
+        "<label>Availability *</label>" +
+        "<input id='appAvail-" + idAttr + "' type='text' placeholder='e.g., Weekday mornings, Mon/Wed/Fri' />" +
+        "<button class='action-btn apply-btn' onclick=\"submitApplication('" + idAttr + "')\">Submit Application</button>" +
+      "</div>" +
+      "<div class='row-buttons'>" +
+        "<button class='action-btn' onclick=\"toggleDetails('" + idAttr + "')\">View Details</button>" +
+        "<button class='action-btn apply-btn' onclick=\"toggleApply('" + idAttr + "')\">Apply</button>" +
+        "<button class='delete-btn' onclick=\"deleteJob('" + idAttr + "')\">Delete</button>" +
+      "</div>";
 
     listEl.appendChild(div);
   }

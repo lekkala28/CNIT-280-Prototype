@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Family Directory | Special Space</title>
+  <title>Community Directory | Special Space</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,7 +11,6 @@
       margin: 0;
       padding: 0 0 0 220px;
     }
-
     .sidebar {
       position: fixed;
       left: 0;
@@ -23,9 +22,7 @@
       overflow-y: auto;
       z-index: 100;
     }
-
     .sidebar a { text-decoration: none; }
-
     .sidebar button {
       display: block;
       width: 80%;
@@ -40,33 +37,47 @@
       font-family: Arial, sans-serif;
       font-size: 14px;
     }
-
     .sidebar button:hover { background-color: #d9d9d9; }
-
     .page-wrap {
       width: 90%;
       max-width: 1060px;
       margin: 50px auto;
     }
-
     h1 {
       text-align: center;
       margin-bottom: 6px;
       color: #222;
     }
-
     .subtitle {
       text-align: center;
       color: #555;
       margin-bottom: 24px;
     }
-
+    .tab-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      padding: 12px 28px;
+      background: #e9eef7;
+      color: #222;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #007bff;
+      color: white;
+    }
     .top-bar {
       display: flex;
       justify-content: center;
       margin-bottom: 24px;
     }
-
     .toggle-btn {
       padding: 12px 24px;
       background: #007bff;
@@ -76,13 +87,8 @@
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
     }
-
-    .toggle-btn:hover {
-      background: #0056b3;
-    }
-
+    .toggle-btn:hover { background: #0056b3; }
     .form-panel {
       display: none;
       background: white;
@@ -92,16 +98,11 @@
       max-width: 520px;
       margin: 0 auto 30px auto;
     }
-
-    .form-panel.open {
-      display: block;
-    }
-
+    .form-panel.open { display: block; }
     .form-panel h2 {
       margin-top: 0;
       color: #222;
     }
-
     label {
       display: block;
       margin-top: 12px;
@@ -109,21 +110,23 @@
       font-weight: bold;
       color: #222;
     }
-
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 15px;
       box-sizing: border-box;
+      background: white;
+      color: #222;
     }
-
+    input.invalid, textarea.invalid, select.invalid {
+      border: 2px solid #d9534f;
+    }
     textarea {
       resize: vertical;
       min-height: 70px;
     }
-
     .submit-btn {
       margin-top: 18px;
       padding: 12px 24px;
@@ -134,27 +137,36 @@
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
       width: 100%;
     }
-
-    .submit-btn:hover {
-      background: #0056b3;
-    }
-
+    .submit-btn:hover { background: #0056b3; }
     .message {
       margin-top: 12px;
       text-align: center;
       font-weight: bold;
       color: green;
     }
-
+    .filter-bar {
+      background: white;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 700px) {
+      .filter-bar { grid-template-columns: 1fr; }
+    }
+    .filter-bar input, .filter-bar select {
+      margin: 0;
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
     }
-
     .profile-card {
       background: white;
       border-radius: 12px;
@@ -162,8 +174,10 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.15s;
     }
-
+    .profile-card:hover { transform: translateY(-3px); }
     .card-header {
       background: #007bff;
       padding: 24px 20px;
@@ -171,7 +185,7 @@
       align-items: center;
       gap: 16px;
     }
-
+    .card-header.caregiver { background: #6f42c1; }
     .avatar {
       width: 64px;
       height: 64px;
@@ -185,27 +199,19 @@
       color: #007bff;
       flex-shrink: 0;
     }
-
-    .card-header-text {
-      color: white;
-    }
-
+    .card-header.caregiver .avatar { color: #6f42c1; }
+    .card-header-text { color: white; }
     .card-header-text h3 {
       margin: 0 0 4px 0;
       font-size: 18px;
       color: white;
     }
-
     .card-header-text span {
       font-size: 14px;
       opacity: 0.9;
       color: white;
     }
-
-    .card-body {
-      padding: 16px 20px 20px 20px;
-    }
-
+    .card-body { padding: 16px 20px 20px 20px; }
     .info-row {
       display: flex;
       align-items: baseline;
@@ -214,22 +220,14 @@
       color: #333;
       border-bottom: 1px solid #f0f0f0;
     }
-
-    .info-row:last-child {
-      border-bottom: none;
-    }
-
+    .info-row:last-child { border-bottom: none; }
     .info-label {
       font-weight: bold;
-      width: 80px;
+      width: 110px;
       flex-shrink: 0;
       color: #555;
     }
-
-    .info-value {
-      color: #222;
-    }
-
+    .info-value { color: #222; }
     .bio-section {
       margin-top: 10px;
       padding-top: 10px;
@@ -238,13 +236,50 @@
       color: #444;
       line-height: 1.5;
     }
-
     .empty-msg {
       text-align: center;
       color: #888;
       padding: 40px 0;
       font-size: 16px;
     }
+    .detail-panel {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 30px;
+      margin-bottom: 20px;
+    }
+    .detail-panel h2 {
+      margin: 0 0 6px 0;
+      color: #222;
+    }
+    .detail-panel .detail-sub {
+      color: #555;
+      margin-bottom: 18px;
+    }
+    .back-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .back-btn:hover { background: #5a6268; }
+    .request-btn {
+      margin-top: 18px;
+      padding: 12px 24px;
+      background: #6f42c1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .request-btn:hover { background: #5a32a3; }
   </style>
 </head>
 <body>
@@ -267,47 +302,173 @@
   </div>
 
   <div class="page-wrap">
-    <h1>Family Directory</h1>
-    <p class="subtitle">Connect with other families in the Special Space community.</p>
+    <h1>Community Directory</h1>
+    <p class="subtitle">Browse caregivers and connect with other families in the Special Space community.</p>
 
-    <div class="top-bar">
-      <button class="toggle-btn" id="toggleFormBtn" onclick="toggleForm()">Add Your Family</button>
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tabCaregivers" onclick="switchTab('caregivers')">Caregivers</button>
+      <button class="tab-btn" id="tabFamilies" onclick="switchTab('families')">Families</button>
     </div>
 
-    <div class="form-panel" id="formPanel">
-      <h2>Add Your Information</h2>
+    <!-- ========== CAREGIVERS TAB ========== -->
+    <div id="caregiversTab">
 
-      <form id="familyForm">
-        <label for="fullName">Full Name *</label>
-        <input type="text" id="fullName" required placeholder="e.g., Maria Johnson" />
+      <div id="caregiverList">
+        <div id="caregiverGrid" class="grid"></div>
+        <div id="caregiverEmpty" class="empty-msg" style="display:none;">No caregivers are currently listed.</div>
+      </div>
 
-        <label for="age">Age</label>
-        <input type="number" id="age" min="1" max="120" placeholder="e.g., 34" />
+      <div id="caregiverDetail" style="display:none;"></div>
 
-        <label for="city">City *</label>
-        <input type="text" id="city" required placeholder="e.g., Whispering Hills" />
+      <div id="caregiverRequest" style="display:none;">
+        <button class="back-btn" onclick="showCaregiverDetail(currentCaregiverId)">Back to Profile</button>
+        <div class="detail-panel">
+          <h2>Request Connection</h2>
+          <p class="detail-sub">Tell us about your needs and we will connect you with this caregiver.</p>
 
-        <label for="phone">Phone</label>
-        <input type="tel" id="phone" placeholder="e.g., (555) 123-4567" />
+          <form id="connectionForm" novalidate>
+            <label for="cName">Your Name *</label>
+            <input type="text" id="cName" placeholder="Your full name" />
 
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="e.g., maria@email.com" />
+            <label for="cEmail">Email *</label>
+            <input type="email" id="cEmail" placeholder="you@email.com" />
 
-        <label for="bio">About Your Family</label>
-        <textarea id="bio" placeholder="Tell the community a little about your family..."></textarea>
+            <label for="cPhone">Phone</label>
+            <input type="tel" id="cPhone" placeholder="(555) 123-4567" />
 
-        <button type="submit" class="submit-btn">Add to Directory</button>
-      </form>
+            <label for="cCareType">Type of Care Needed *</label>
+            <select id="cCareType">
+              <option value="">Select a care type</option>
+              <option>Autism Support</option>
+              <option>Down Syndrome Support</option>
+              <option>Cerebral Palsy Support</option>
+              <option>Respite Care</option>
+              <option>Behavioral Support</option>
+              <option>Adaptive Sports / Recreation</option>
+              <option>Other</option>
+            </select>
 
-      <div class="message" id="message"></div>
+            <label for="cDescription">Description of Specific Needs</label>
+            <textarea id="cDescription" placeholder="Tell the caregiver about specific needs, schedule, or preferences..."></textarea>
+
+            <button type="submit" class="submit-btn">Submit Request</button>
+          </form>
+          <div class="message" id="connectionMessage"></div>
+        </div>
+      </div>
     </div>
 
-    <div id="directoryGrid" class="grid"></div>
-    <div id="emptyMsg" class="empty-msg" style="display:none;">No families in the directory yet. Be the first to add yours!</div>
+    <!-- ========== FAMILIES TAB ========== -->
+    <div id="familiesTab" style="display:none;">
+
+      <div id="familyList">
+        <div class="filter-bar">
+          <input type="text" id="familySearch" placeholder="Search by name, needs, or interests..." oninput="renderFamilies()" />
+          <select id="filterAge" onchange="renderFamilies()">
+            <option value="">All ages</option>
+            <option value="0-17">Under 18</option>
+            <option value="18-30">18-30</option>
+            <option value="31-50">31-50</option>
+            <option value="51+">51+</option>
+          </select>
+          <select id="filterNeeds" onchange="renderFamilies()">
+            <option value="">All needs</option>
+            <option>Autism</option>
+            <option>Down Syndrome</option>
+            <option>Cerebral Palsy</option>
+            <option>Respite Care</option>
+            <option>Behavioral Support</option>
+          </select>
+        </div>
+
+        <div class="top-bar">
+          <button class="toggle-btn" id="toggleFormBtn" onclick="toggleFamilyForm()">Add Your Family</button>
+        </div>
+
+        <div class="form-panel" id="formPanel">
+          <h2>Add Your Information</h2>
+          <form id="familyForm">
+            <label for="fullName">Full Name *</label>
+            <input type="text" id="fullName" required placeholder="e.g., Maria Johnson" />
+
+            <label for="age">Age</label>
+            <input type="number" id="age" min="1" max="120" placeholder="e.g., 34" />
+
+            <label for="city">City *</label>
+            <input type="text" id="city" required placeholder="e.g., Whispering Hills" />
+
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" placeholder="e.g., (555) 123-4567" />
+
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="e.g., maria@email.com" />
+
+            <label for="needs">Needs</label>
+            <input type="text" id="needs" placeholder="e.g., Autism support, Respite care" />
+
+            <label for="interests">Interests</label>
+            <input type="text" id="interests" placeholder="e.g., Adaptive sports, Music therapy" />
+
+            <label for="preferences">Preferences</label>
+            <input type="text" id="preferences" placeholder="e.g., Female caregiver, mornings only" />
+
+            <label for="notes">Additional Notes</label>
+            <textarea id="notes" placeholder="Anything else caregivers should know..."></textarea>
+
+            <button type="submit" class="submit-btn">Add to Directory</button>
+          </form>
+          <div class="message" id="message"></div>
+        </div>
+
+        <div id="directoryGrid" class="grid"></div>
+        <div id="emptyMsg" class="empty-msg" style="display:none;">No matching results found.</div>
+      </div>
+
+      <div id="familyDetail" style="display:none;"></div>
+    </div>
   </div>
 
   <script>
     var FAMILIES_KEY = "special_space_families_v1";
+    var CAREGIVERS_KEY = "special_space_caregivers_v1";
+    var REQUESTS_KEY = "special_space_caregiver_requests_v1";
+
+    var currentCaregiverId = null;
+
+    var defaultCaregivers = [
+      {
+        id: "cg1",
+        name: "Linda Hernandez",
+        specialization: "Autism Support",
+        availability: "Weekdays 9am-3pm",
+        experience: "8 years working with children on the autism spectrum. Certified ABA specialist.",
+        background: "Background check verified March 2026 by SafeScreen Inc."
+      },
+      {
+        id: "cg2",
+        name: "James O'Connor",
+        specialization: "Adaptive Sports Coach",
+        availability: "Weekends",
+        experience: "12 years coaching adaptive basketball, swimming, and track. Special Olympics certified.",
+        background: "Background check verified February 2026 by VerifiedCheck Group."
+      },
+      {
+        id: "cg3",
+        name: "Aisha Patel",
+        specialization: "Respite Care / Behavioral Support",
+        availability: "Flexible, evenings preferred",
+        experience: "6 years in respite care, BCBA in training. Experience with non-verbal communication.",
+        background: "Background check verified January 2026 by SafeScreen Inc."
+      },
+      {
+        id: "cg4",
+        name: "Marcus Lee",
+        specialization: "Down Syndrome Support",
+        availability: "Mon, Wed, Fri afternoons",
+        experience: "5 years supporting teens and young adults with Down syndrome through life-skills coaching.",
+        background: "Background check verified March 2026 by SafeScreen Inc."
+      }
+    ];
 
     var defaultFamilies = [
       {
@@ -317,7 +478,10 @@
         city: "Whispering Hills",
         phone: "(555) 210-4488",
         email: "maria.johnson@email.com",
-        bio: "Mother of two, one with autism. We moved to Whispering Hills last year and are looking for inclusive activities and a supportive network for our family."
+        needs: "Autism support",
+        interests: "Music therapy, swimming",
+        preferences: "Female caregiver, weekday mornings",
+        notes: "Mother of two, one with autism. New to the area and looking for inclusive activities."
       },
       {
         id: "f2",
@@ -326,7 +490,10 @@
         city: "Whispering Hills",
         phone: "(555) 339-7120",
         email: "parkfamily@email.com",
-        bio: "We have a 10-year-old son with Down syndrome. David coaches adaptive sports on weekends and Kim runs a parent support blog. Always happy to meet new families."
+        needs: "Down Syndrome support",
+        interests: "Adaptive sports, art classes",
+        preferences: "Caregiver experienced with teenagers",
+        notes: "10-year-old son with Down syndrome. David coaches adaptive sports."
       },
       {
         id: "f3",
@@ -335,7 +502,10 @@
         city: "Cedar Grove",
         phone: "(555) 876-2201",
         email: "rosa.g@email.com",
-        bio: "Full-time caregiver for my younger brother who has cerebral palsy. I am looking for respite care resources and other caregivers to connect with."
+        needs: "Cerebral Palsy support, Respite Care",
+        interests: "Reading, sensory activities",
+        preferences: "Bilingual (Spanish) caregiver preferred",
+        notes: "Full-time caregiver for younger brother with cerebral palsy. Looking for respite resources."
       }
     ];
 
@@ -348,97 +518,300 @@
         .replaceAll("'", "&#039;");
     }
 
-    function loadFamilies() {
+    function loadJSON(key, fallback) {
       try {
-        var raw = localStorage.getItem(FAMILIES_KEY);
-        if (!raw) {
-          localStorage.setItem(FAMILIES_KEY, JSON.stringify(defaultFamilies));
-          return defaultFamilies.map(function(f) { return Object.assign({}, f); });
-        }
+        var raw = localStorage.getItem(key);
+        if (!raw) return fallback;
         var parsed = JSON.parse(raw);
-        if (!Array.isArray(parsed) || parsed.length === 0) {
-          localStorage.setItem(FAMILIES_KEY, JSON.stringify(defaultFamilies));
-          return defaultFamilies.map(function(f) { return Object.assign({}, f); });
-        }
-        return parsed;
+        return parsed != null ? parsed : fallback;
       } catch (e) {
-        return defaultFamilies;
+        return fallback;
       }
     }
 
-    function saveFamilies(list) {
-      localStorage.setItem(FAMILIES_KEY, JSON.stringify(list));
+    function saveJSON(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
     }
 
     function getInitials(name) {
-      var parts = name.trim().split(/\s+/);
+      var parts = String(name || "").trim().split(/\s+/);
       if (parts.length >= 2) {
         return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
       }
-      return name.trim().substring(0, 2).toUpperCase();
+      return String(name || "").trim().substring(0, 2).toUpperCase();
     }
 
+    function loadCaregivers() {
+      var stored = loadJSON(CAREGIVERS_KEY, null);
+      if (!stored || !Array.isArray(stored) || stored.length === 0) {
+        saveJSON(CAREGIVERS_KEY, defaultCaregivers);
+        return defaultCaregivers.slice();
+      }
+      return stored;
+    }
+
+    function loadFamilies() {
+      var stored = loadJSON(FAMILIES_KEY, null);
+      if (!stored || !Array.isArray(stored) || stored.length === 0) {
+        saveJSON(FAMILIES_KEY, defaultFamilies);
+        return defaultFamilies.slice();
+      }
+      return stored;
+    }
+
+    var caregivers = loadCaregivers();
     var families = loadFamilies();
 
-    function renderDirectory() {
-      var gridEl = document.getElementById("directoryGrid");
-      var emptyEl = document.getElementById("emptyMsg");
+    // ========== TAB HANDLING ==========
 
-      gridEl.innerHTML = "";
+    function switchTab(tab) {
+      document.getElementById("caregiversTab").style.display = (tab === "caregivers") ? "block" : "none";
+      document.getElementById("familiesTab").style.display = (tab === "families") ? "block" : "none";
+      document.getElementById("tabCaregivers").classList.toggle("active", tab === "caregivers");
+      document.getElementById("tabFamilies").classList.toggle("active", tab === "families");
 
-      if (families.length === 0) {
+      if (tab === "caregivers") {
+        showCaregiverList();
+      } else {
+        showFamilyList();
+      }
+    }
+
+    // ========== CAREGIVERS (UC-1) ==========
+
+    function showCaregiverList() {
+      document.getElementById("caregiverList").style.display = "block";
+      document.getElementById("caregiverDetail").style.display = "none";
+      document.getElementById("caregiverRequest").style.display = "none";
+      renderCaregivers();
+    }
+
+    function renderCaregivers() {
+      var grid = document.getElementById("caregiverGrid");
+      var emptyEl = document.getElementById("caregiverEmpty");
+      grid.innerHTML = "";
+
+      if (caregivers.length === 0) {
         emptyEl.style.display = "block";
         return;
       }
       emptyEl.style.display = "none";
 
-      families.forEach(function(f) {
+      caregivers.forEach(function(c) {
         var card = document.createElement("div");
         card.className = "profile-card";
+        card.onclick = (function(id) { return function() { showCaregiverDetail(id); }; })(c.id);
 
-        var avatarContent = escapeHtml(getInitials(f.name));
+        card.innerHTML =
+          '<div class="card-header caregiver">' +
+            '<div class="avatar">' + escapeHtml(getInitials(c.name)) + '</div>' +
+            '<div class="card-header-text">' +
+              '<h3>' + escapeHtml(c.name) + '</h3>' +
+              '<span>' + escapeHtml(c.specialization) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="card-body">' +
+            '<div class="info-row"><span class="info-label">Specialization</span><span class="info-value">' + escapeHtml(c.specialization) + '</span></div>' +
+            '<div class="info-row"><span class="info-label">Availability</span><span class="info-value">' + escapeHtml(c.availability) + '</span></div>' +
+          '</div>';
+
+        grid.appendChild(card);
+      });
+    }
+
+    function showCaregiverDetail(id) {
+      currentCaregiverId = id;
+      var c = null;
+      for (var i = 0; i < caregivers.length; i++) {
+        if (caregivers[i].id === id) { c = caregivers[i]; break; }
+      }
+      if (!c) { showCaregiverList(); return; }
+
+      document.getElementById("caregiverList").style.display = "none";
+      document.getElementById("caregiverRequest").style.display = "none";
+
+      var detail = document.getElementById("caregiverDetail");
+      detail.style.display = "block";
+      detail.innerHTML =
+        '<button class="back-btn" onclick="showCaregiverList()">Back to Caregivers</button>' +
+        '<div class="detail-panel">' +
+          '<h2>' + escapeHtml(c.name) + '</h2>' +
+          '<div class="detail-sub">' + escapeHtml(c.specialization) + '</div>' +
+          '<div class="info-row"><span class="info-label">Specialization</span><span class="info-value">' + escapeHtml(c.specialization) + '</span></div>' +
+          '<div class="info-row"><span class="info-label">Availability</span><span class="info-value">' + escapeHtml(c.availability) + '</span></div>' +
+          '<div class="info-row"><span class="info-label">Experience</span><span class="info-value">' + escapeHtml(c.experience) + '</span></div>' +
+          '<div class="info-row"><span class="info-label">Background</span><span class="info-value">' + escapeHtml(c.background) + '</span></div>' +
+          '<button class="request-btn" onclick="showConnectionForm()">Request Connection</button>' +
+        '</div>';
+
+      window.scrollTo(0, 0);
+    }
+
+    function showConnectionForm() {
+      document.getElementById("caregiverList").style.display = "none";
+      document.getElementById("caregiverDetail").style.display = "none";
+      document.getElementById("caregiverRequest").style.display = "block";
+      document.getElementById("connectionMessage").textContent = "";
+      document.getElementById("connectionForm").reset();
+      clearInvalid("connectionForm");
+      window.scrollTo(0, 0);
+    }
+
+    function clearInvalid(formId) {
+      var fields = document.querySelectorAll("#" + formId + " input, #" + formId + " select, #" + formId + " textarea");
+      for (var i = 0; i < fields.length; i++) {
+        fields[i].classList.remove("invalid");
+      }
+    }
+
+    document.getElementById("connectionForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      clearInvalid("connectionForm");
+
+      var nameEl = document.getElementById("cName");
+      var emailEl = document.getElementById("cEmail");
+      var phoneEl = document.getElementById("cPhone");
+      var typeEl = document.getElementById("cCareType");
+      var descEl = document.getElementById("cDescription");
+
+      var name = nameEl.value.trim();
+      var email = emailEl.value.trim();
+      var phone = phoneEl.value.trim();
+      var careType = typeEl.value;
+      var description = descEl.value.trim();
+
+      var valid = true;
+      if (!name) { nameEl.classList.add("invalid"); valid = false; }
+      if (!email) { emailEl.classList.add("invalid"); valid = false; }
+      if (!careType) { typeEl.classList.add("invalid"); valid = false; }
+
+      if (!valid) {
+        document.getElementById("connectionMessage").style.color = "#d9534f";
+        document.getElementById("connectionMessage").textContent = "Please complete all required fields.";
+        return;
+      }
+
+      var requests = loadJSON(REQUESTS_KEY, []);
+      requests.push({
+        id: (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+        caregiverId: currentCaregiverId,
+        name: name,
+        email: email,
+        phone: phone,
+        careType: careType,
+        description: description,
+        submittedAt: Date.now()
+      });
+      saveJSON(REQUESTS_KEY, requests);
+
+      document.getElementById("connectionForm").reset();
+      document.getElementById("connectionMessage").style.color = "green";
+      document.getElementById("connectionMessage").textContent = "Connection request submitted. The coordinator has been notified.";
+    });
+
+    // ========== FAMILIES (UC-3) ==========
+
+    function showFamilyList() {
+      document.getElementById("familyList").style.display = "block";
+      document.getElementById("familyDetail").style.display = "none";
+      renderFamilies();
+    }
+
+    function ageInRange(age, range) {
+      if (!range) return true;
+      var n = parseInt(age, 10);
+      if (isNaN(n)) return false;
+      if (range === "0-17") return n < 18;
+      if (range === "18-30") return n >= 18 && n <= 30;
+      if (range === "31-50") return n >= 31 && n <= 50;
+      if (range === "51+") return n >= 51;
+      return true;
+    }
+
+    function renderFamilies() {
+      var grid = document.getElementById("directoryGrid");
+      var emptyEl = document.getElementById("emptyMsg");
+      grid.innerHTML = "";
+
+      var query = document.getElementById("familySearch").value.toLowerCase().trim();
+      var ageRange = document.getElementById("filterAge").value;
+      var needsFilter = document.getElementById("filterNeeds").value.toLowerCase();
+
+      var filtered = families.filter(function(f) {
+        if (!ageInRange(f.age, ageRange)) return false;
+        if (needsFilter && !(String(f.needs || "").toLowerCase().indexOf(needsFilter) >= 0)) return false;
+        if (query) {
+          var hay = [f.name, f.needs, f.interests, f.preferences, f.notes, f.city]
+            .map(function(s) { return String(s || "").toLowerCase(); }).join(" ");
+          if (hay.indexOf(query) < 0) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+
+      filtered.forEach(function(f) {
+        var card = document.createElement("div");
+        card.className = "profile-card";
+        card.onclick = (function(id) { return function() { showFamilyDetail(id); }; })(f.id);
 
         var ageDisplay = f.age ? escapeHtml(String(f.age)) + " years old" : "";
-        var subtitle = [ageDisplay, escapeHtml(f.city)].filter(Boolean).join(" - ");
-
-        var bodyRows = "";
-
-        if (f.city) {
-          bodyRows += '<div class="info-row"><span class="info-label">City</span><span class="info-value">' + escapeHtml(f.city) + '</span></div>';
-        }
-        if (f.age) {
-          bodyRows += '<div class="info-row"><span class="info-label">Age</span><span class="info-value">' + escapeHtml(String(f.age)) + '</span></div>';
-        }
-        if (f.phone) {
-          bodyRows += '<div class="info-row"><span class="info-label">Phone</span><span class="info-value">' + escapeHtml(f.phone) + '</span></div>';
-        }
-        if (f.email) {
-          bodyRows += '<div class="info-row"><span class="info-label">Email</span><span class="info-value">' + escapeHtml(f.email) + '</span></div>';
-        }
-
-        var bioHtml = "";
-        if (f.bio) {
-          bioHtml = '<div class="bio-section">' + escapeHtml(f.bio) + '</div>';
-        }
+        var subtitle = [ageDisplay, escapeHtml(f.city || "")].filter(Boolean).join(" - ");
 
         card.innerHTML =
           '<div class="card-header">' +
-            '<div class="avatar">' + avatarContent + '</div>' +
+            '<div class="avatar">' + escapeHtml(getInitials(f.name)) + '</div>' +
             '<div class="card-header-text">' +
               '<h3>' + escapeHtml(f.name) + '</h3>' +
               '<span>' + subtitle + '</span>' +
             '</div>' +
           '</div>' +
           '<div class="card-body">' +
-            bodyRows +
-            bioHtml +
+            (f.needs ? '<div class="info-row"><span class="info-label">Needs</span><span class="info-value">' + escapeHtml(f.needs) + '</span></div>' : "") +
+            (f.interests ? '<div class="info-row"><span class="info-label">Interests</span><span class="info-value">' + escapeHtml(f.interests) + '</span></div>' : "") +
           '</div>';
 
-        gridEl.appendChild(card);
+        grid.appendChild(card);
       });
     }
 
-    function toggleForm() {
+    function showFamilyDetail(id) {
+      var f = null;
+      for (var i = 0; i < families.length; i++) {
+        if (families[i].id === id) { f = families[i]; break; }
+      }
+      if (!f) { showFamilyList(); return; }
+
+      document.getElementById("familyList").style.display = "none";
+      var detail = document.getElementById("familyDetail");
+      detail.style.display = "block";
+
+      var rows = "";
+      if (f.city) rows += '<div class="info-row"><span class="info-label">City</span><span class="info-value">' + escapeHtml(f.city) + '</span></div>';
+      if (f.age) rows += '<div class="info-row"><span class="info-label">Age</span><span class="info-value">' + escapeHtml(String(f.age)) + '</span></div>';
+      if (f.phone) rows += '<div class="info-row"><span class="info-label">Phone</span><span class="info-value">' + escapeHtml(f.phone) + '</span></div>';
+      if (f.email) rows += '<div class="info-row"><span class="info-label">Email</span><span class="info-value">' + escapeHtml(f.email) + '</span></div>';
+      if (f.needs) rows += '<div class="info-row"><span class="info-label">Needs</span><span class="info-value">' + escapeHtml(f.needs) + '</span></div>';
+      if (f.interests) rows += '<div class="info-row"><span class="info-label">Interests</span><span class="info-value">' + escapeHtml(f.interests) + '</span></div>';
+      if (f.preferences) rows += '<div class="info-row"><span class="info-label">Preferences</span><span class="info-value">' + escapeHtml(f.preferences) + '</span></div>';
+      if (f.notes) rows += '<div class="info-row"><span class="info-label">Notes</span><span class="info-value">' + escapeHtml(f.notes) + '</span></div>';
+
+      detail.innerHTML =
+        '<button class="back-btn" onclick="showFamilyList()">Back to Directory</button>' +
+        '<div class="detail-panel">' +
+          '<h2>' + escapeHtml(f.name) + '</h2>' +
+          (f.city ? '<div class="detail-sub">' + escapeHtml(f.city) + '</div>' : '') +
+          rows +
+        '</div>';
+
+      window.scrollTo(0, 0);
+    }
+
+    function toggleFamilyForm() {
       var panel = document.getElementById("formPanel");
       var btn = document.getElementById("toggleFormBtn");
       if (panel.classList.contains("open")) {
@@ -460,7 +833,10 @@
         city: document.getElementById("city").value.trim(),
         phone: document.getElementById("phone").value.trim(),
         email: document.getElementById("email").value.trim(),
-        bio: document.getElementById("bio").value.trim()
+        needs: document.getElementById("needs").value.trim(),
+        interests: document.getElementById("interests").value.trim(),
+        preferences: document.getElementById("preferences").value.trim(),
+        notes: document.getElementById("notes").value.trim()
       };
 
       if (!entry.name || !entry.city) {
@@ -469,17 +845,17 @@
       }
 
       families.unshift(entry);
-      saveFamilies(families);
-      renderDirectory();
+      saveJSON(FAMILIES_KEY, families);
+      renderFamilies();
 
       document.getElementById("familyForm").reset();
-      document.getElementById("message").textContent = "Your family has been added to the directory!";
+      document.getElementById("message").textContent = "Your family has been added to the directory.";
 
       document.getElementById("formPanel").classList.remove("open");
       document.getElementById("toggleFormBtn").textContent = "Add Your Family";
     });
 
-    renderDirectory();
+    showCaregiverList();
   </script>
 </body>
 </html>

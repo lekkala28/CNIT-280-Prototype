@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Health Information | Special Space</title>
+  <title>Health & Newsletter Management | Special Space</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
@@ -307,10 +307,10 @@
 
     <!-- ==================== VIEW: Dashboard ==================== -->
     <div id="viewDashboard">
-      <h1>Health Information</h1>
+      <h1>Health &amp; Newsletter Management</h1>
       <div class="intro">
-        Track health metrics, review care plans, and manage client health records
-        for the Whispering Hills community.
+        Manage health records, track health metrics and care plans, and update your newsletter
+        subscription preferences in one place.
       </div>
 
       <h2>Recent Health Entries</h2>
@@ -344,6 +344,58 @@
             <button class="action-btn" style="margin-top:0;" onclick="addClient()">Add Client</button>
           </div>
         </div>
+      </div>
+
+      <h2>Health Records</h2>
+      <div id="healthRecordList"></div>
+      <div id="recordsEmpty" class="empty-msg" style="display:none;">No health records yet. Add one below.</div>
+      <div style="margin-top: 12px;">
+        <button class="action-btn" onclick="openNewHealthRecord()">Add New Record</button>
+      </div>
+
+      <h2>Newsletter Preferences</h2>
+      <div class="card">
+        <form id="newsletterPrefForm" novalidate>
+          <label>Email *</label>
+          <input id="prefEmail" type="email" placeholder="you@email.com" />
+
+          <div class="caregiver-toggle" style="margin-top: 14px;">
+            <input type="checkbox" id="prefSubscribed">
+            <label for="prefSubscribed" style="display:inline; margin-top:0; font-weight:normal;">Subscribed to the newsletter</label>
+          </div>
+
+          <div>
+            <button class="action-btn" type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW: Health Record Form ==================== -->
+    <div id="viewHealthRecord" style="display:none;">
+      <div class="view-header">
+        <button class="back-btn" onclick="showView('viewDashboard')">Back</button>
+        <h1 id="recordFormTitle">Add Health Record</h1>
+      </div>
+
+      <div class="card">
+        <form id="healthRecordForm" novalidate>
+          <label>Patient Name *</label>
+          <input id="recPatientName" type="text" placeholder="e.g., John Doe" />
+
+          <label>Medications *</label>
+          <textarea id="recMedications" placeholder="e.g., Medication A 10mg daily, Medication B as needed"></textarea>
+
+          <label>Conditions *</label>
+          <textarea id="recConditions" placeholder="e.g., Type 2 diabetes, asthma"></textarea>
+
+          <label>Notes</label>
+          <textarea id="recNotes" placeholder="Any additional notes..."></textarea>
+
+          <div>
+            <button class="action-btn" type="submit">Save</button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -438,9 +490,12 @@ var ENTRIES_KEY = "special_space_health_entries_v1";
 var CARE_PLAN_KEY = "special_space_care_plan_v1";
 var CLIENTS_KEY = "special_space_clients_v1";
 var CAREGIVER_KEY = "special_space_caregiver_mode_v1";
+var RECORDS_KEY = "special_space_health_records_v1";
+var NEWSLETTER_PREF_KEY = "special_space_newsletter_pref_v1";
 
 var currentClientId = null;
 var carePlanTarget = "self";
+var currentRecordId = null;
 
 function escapeHtml(str) {
   return String(str || "")
@@ -474,7 +529,7 @@ function showConfirmation(message) {
 }
 
 function showView(viewId, param) {
-  var views = ["viewDashboard", "viewLogMetrics", "viewClientHealth", "viewUpdateCarePlan"];
+  var views = ["viewDashboard", "viewLogMetrics", "viewClientHealth", "viewUpdateCarePlan", "viewHealthRecord"];
   for (var i = 0; i < views.length; i++) {
     document.getElementById(views[i]).style.display = "none";
   }
@@ -493,6 +548,8 @@ function showView(viewId, param) {
       carePlanTarget = param;
     }
     loadCarePlanForm();
+  } else if (viewId === "viewHealthRecord") {
+    loadHealthRecordForm();
   }
 }
 
@@ -503,6 +560,8 @@ function renderDashboard() {
   renderCarePlanSummary();
   renderClientList();
   restoreCaregiverMode();
+  renderHealthRecords();
+  renderNewsletterPref();
 }
 
 function renderRecentEntries() {
@@ -887,6 +946,184 @@ document.getElementById("carePlanForm").addEventListener("submit", function(e) {
     currentClientId = carePlanTarget;
     showView("viewClientHealth");
   }
+});
+
+// --- Health Records ---
+
+function renderHealthRecords() {
+  var records = loadJSON(RECORDS_KEY, []);
+  var container = document.getElementById("healthRecordList");
+  var emptyEl = document.getElementById("recordsEmpty");
+  container.innerHTML = "";
+
+  if (records.length === 0) {
+    emptyEl.style.display = "block";
+    return;
+  }
+  emptyEl.style.display = "none";
+
+  records.sort(function(a, b) {
+    return (b.updatedAt || 0) - (a.updatedAt || 0);
+  });
+
+  for (var i = 0; i < records.length; i++) {
+    var r = records[i];
+    var div = document.createElement("div");
+    div.className = "client-row";
+    div.innerHTML =
+      "<span><strong>" + escapeHtml(r.patientName) + "</strong>" +
+      (r.conditions ? " - " + escapeHtml(r.conditions) : "") + "</span>" +
+      "<div class='client-actions'>" +
+        "<button class='select-btn' onclick=\"openHealthRecord('" + r.id + "')\">Edit</button>" +
+        "<button class='delete-btn' onclick=\"deleteHealthRecord('" + r.id + "')\">Remove</button>" +
+      "</div>";
+    container.appendChild(div);
+  }
+}
+
+function openNewHealthRecord() {
+  currentRecordId = null;
+  showView("viewHealthRecord");
+}
+
+function openHealthRecord(id) {
+  currentRecordId = id;
+  showView("viewHealthRecord");
+}
+
+function loadHealthRecordForm() {
+  clearValidation("healthRecordForm");
+  var titleEl = document.getElementById("recordFormTitle");
+  var nameEl = document.getElementById("recPatientName");
+  var medsEl = document.getElementById("recMedications");
+  var condEl = document.getElementById("recConditions");
+  var notesEl = document.getElementById("recNotes");
+
+  if (currentRecordId) {
+    var records = loadJSON(RECORDS_KEY, []);
+    var record = null;
+    for (var i = 0; i < records.length; i++) {
+      if (records[i].id === currentRecordId) { record = records[i]; break; }
+    }
+    if (record) {
+      titleEl.textContent = "Edit Health Record";
+      nameEl.value = record.patientName || "";
+      medsEl.value = record.medications || "";
+      condEl.value = record.conditions || "";
+      notesEl.value = record.notes || "";
+      return;
+    }
+  }
+
+  titleEl.textContent = "Add Health Record";
+  nameEl.value = "";
+  medsEl.value = "";
+  condEl.value = "";
+  notesEl.value = "";
+}
+
+function deleteHealthRecord(id) {
+  if (!confirm("Remove this health record?")) return;
+  var records = loadJSON(RECORDS_KEY, []);
+  records = records.filter(function(r) { return r.id !== id; });
+  saveJSON(RECORDS_KEY, records);
+  renderHealthRecords();
+}
+
+document.getElementById("healthRecordForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  clearValidation("healthRecordForm");
+
+  var nameEl = document.getElementById("recPatientName");
+  var medsEl = document.getElementById("recMedications");
+  var condEl = document.getElementById("recConditions");
+  var notesEl = document.getElementById("recNotes");
+
+  var patientName = nameEl.value.trim();
+  var medications = medsEl.value.trim();
+  var conditions = condEl.value.trim();
+  var notes = notesEl.value.trim();
+
+  var valid = true;
+  if (!patientName) { nameEl.classList.add("invalid"); valid = false; }
+  if (!medications) { medsEl.classList.add("invalid"); valid = false; }
+  if (!conditions) { condEl.classList.add("invalid"); valid = false; }
+
+  if (!valid) {
+    alert("Please complete all required fields before saving.");
+    return;
+  }
+
+  var records = loadJSON(RECORDS_KEY, []);
+  if (currentRecordId) {
+    for (var i = 0; i < records.length; i++) {
+      if (records[i].id === currentRecordId) {
+        records[i].patientName = patientName;
+        records[i].medications = medications;
+        records[i].conditions = conditions;
+        records[i].notes = notes;
+        records[i].updatedAt = Date.now();
+        break;
+      }
+    }
+  } else {
+    records.push({
+      id: (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+      patientName: patientName,
+      medications: medications,
+      conditions: conditions,
+      notes: notes,
+      updatedAt: Date.now()
+    });
+  }
+  saveJSON(RECORDS_KEY, records);
+
+  showConfirmation("Health record saved successfully.");
+  showView("viewDashboard");
+});
+
+// --- Newsletter Preferences ---
+
+function renderNewsletterPref() {
+  var pref = loadJSON(NEWSLETTER_PREF_KEY, { email: "", subscribed: false });
+  document.getElementById("prefEmail").value = pref.email || "";
+  document.getElementById("prefSubscribed").checked = !!pref.subscribed;
+}
+
+document.getElementById("newsletterPrefForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  var emailEl = document.getElementById("prefEmail");
+  var subEl = document.getElementById("prefSubscribed");
+
+  emailEl.classList.remove("invalid");
+
+  var email = emailEl.value.trim();
+  var subscribed = subEl.checked;
+
+  if (!email) {
+    emailEl.classList.add("invalid");
+    alert("Please enter an email address.");
+    return;
+  }
+
+  var existing = loadJSON(NEWSLETTER_PREF_KEY, { email: "", subscribed: false });
+  if (existing.subscribed && !subscribed) {
+    if (!confirm("Are you sure you want to unsubscribe from the newsletter?")) {
+      subEl.checked = true;
+      return;
+    }
+  }
+
+  saveJSON(NEWSLETTER_PREF_KEY, {
+    email: email,
+    subscribed: subscribed,
+    updatedAt: Date.now()
+  });
+
+  showConfirmation(subscribed
+    ? "Newsletter preferences saved. You are subscribed."
+    : "Newsletter preferences saved. You are unsubscribed.");
 });
 
 // --- Helpers ---

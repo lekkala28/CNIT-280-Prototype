@@ -3,21 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Volunteer Directory | Special Space</title>
+<title>Volunteer Sign Up | Special Space</title>
 
 <style>
 * {
   box-sizing: border-box;
   color: #ffffff;
 }
-
 body {
   margin: 0;
   padding-left: 220px;
   font-family: Arial, sans-serif;
   background-color: #0b1220;
 }
-
 .sidebar {
   position: fixed;
   left: 0;
@@ -29,9 +27,7 @@ body {
   overflow-y: auto;
   z-index: 100;
 }
-
 .sidebar a { text-decoration: none; }
-
 .sidebar button {
   display: block;
   width: 80%;
@@ -45,15 +41,12 @@ body {
   cursor: pointer;
   font-family: Arial, sans-serif;
 }
-
 .sidebar button:hover { background-color: #d9d9d9; }
-
 header {
   padding: 25px;
   text-align: center;
   background: #111a2e;
 }
-
 main {
   display: flex;
   flex-wrap: wrap;
@@ -62,7 +55,6 @@ main {
   gap: 20px;
   padding: 20px;
 }
-
 .card {
   background: #111a2e;
   padding: 20px;
@@ -70,7 +62,6 @@ main {
   flex: 1;
   min-width: 320px;
 }
-
 .volunteer {
   background: #0f1730;
   padding: 12px;
@@ -81,11 +72,7 @@ main {
   align-items: center;
   gap: 12px;
 }
-
-.small {
-  font-size: 14px;
-}
-
+.small { font-size: 14px; }
 button {
   background: #6ea8ff;
   border: none;
@@ -93,12 +80,8 @@ button {
   border-radius: 8px;
   cursor: pointer;
 }
-
-button.danger {
-  background: #ff6b6b;
-}
-
-input, select, textarea {
+button.danger { background: #ff6b6b; }
+input, textarea {
   width: 100%;
   padding: 10px;
   margin-top: 6px;
@@ -107,10 +90,27 @@ input, select, textarea {
   border: none;
   background: #0f1730;
 }
-
+input.invalid, textarea.invalid {
+  outline: 2px solid #ff6b6b;
+}
 textarea {
   min-height: 80px;
   resize: vertical;
+}
+.confirmation {
+  display: none;
+  background: #1a4d1a;
+  border-left: 5px solid #33cc33;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  font-size: 15px;
+}
+.error-msg {
+  display: none;
+  color: #ffb3b3;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 </style>
 </head>
@@ -136,8 +136,8 @@ textarea {
 </div>
 
 <header>
-  <h1>Volunteer Directory</h1>
-  <p>Select a volunteer to view background check information</p>
+  <h1>Volunteer Sign Up</h1>
+  <p>Register your information to join the Special Space volunteer community.</p>
 </header>
 
 <main>
@@ -149,11 +149,17 @@ textarea {
   </section>
 
   <section class="card">
-    <h2>Add Volunteer</h2>
+    <h2>Sign Up</h2>
 
-    <form id="volunteerForm">
-      <label>Full Name *</label>
-      <input type="text" id="name" required>
+    <div id="confirmation" class="confirmation">Sign-up submitted successfully. Thanks for joining.</div>
+    <div id="errorMsg" class="error-msg">Please complete all required fields.</div>
+
+    <form id="volunteerForm" novalidate>
+      <label>First Name *</label>
+      <input type="text" id="firstName">
+
+      <label>Last Name *</label>
+      <input type="text" id="lastName">
 
       <label>Email</label>
       <input type="email" id="email">
@@ -161,45 +167,10 @@ textarea {
       <label>Phone</label>
       <input type="tel" id="phone">
 
-      <label>Role *</label>
-      <select id="role" required>
-        <option value="">Select role</option>
-        <option>Caregiver Support</option>
-        <option>Event Helper</option>
-        <option>Mentor / Buddy</option>
-        <option>Transportation</option>
-        <option>Admin</option>
-        <option>Other</option>
-      </select>
+      <label>Interests / Talents</label>
+      <textarea id="interests" placeholder="Briefly describe your interests, skills, or talents..."></textarea>
 
-      <label>Availability *</label>
-      <select id="availability" required>
-        <option value="">Select availability</option>
-        <option>Weekdays</option>
-        <option>Weeknights</option>
-        <option>Weekends</option>
-        <option>Flexible</option>
-      </select>
-
-      <label>Background Check Status *</label>
-      <select id="bgStatus" required>
-        <option value="">Select status</option>
-        <option>Completed</option>
-        <option>Pending</option>
-        <option>Expired</option>
-        <option>None</option>
-      </select>
-
-      <label>Completion Date</label>
-      <input type="date" id="completionDate">
-
-      <label>Organization</label>
-      <input type="text" id="organization" placeholder="Ex: SafeScreen Inc">
-
-      <label>Notes</label>
-      <textarea id="notes"></textarea>
-
-      <button type="submit">Add Volunteer</button>
+      <button type="submit">Submit</button>
     </form>
   </section>
 
@@ -210,43 +181,31 @@ const STORAGE_KEY = "special_space_volunteers";
 
 const defaultVolunteers = [
   {
+    firstName: "Sarah",
+    lastName: "Williams",
     name: "Sarah Williams",
     email: "sarah@email.com",
     phone: "555-333-4444",
-    role: "Event Helper",
-    availability: "Weekends",
-    notes: "Great with community events",
-    backgroundCheck: {
-      status: "Completed",
-      completionDate: "2026-03-12",
-      organization: "SafeScreen Inc"
-    }
+    interestsTalents: "Event planning, working with kids, photography.",
+    backgroundCheck: { status: "Completed", completionDate: "2026-03-12", organization: "SafeScreen Inc" }
   },
   {
+    firstName: "Michael",
+    lastName: "Johnson",
     name: "Michael Johnson",
     email: "mj@email.com",
     phone: "555-111-2222",
-    role: "Mentor / Buddy",
-    availability: "Weekdays",
-    notes: "Experienced mentor",
-    backgroundCheck: {
-      status: "Expired",
-      completionDate: "2024-11-20",
-      organization: "VerifiedCheck Group"
-    }
+    interestsTalents: "Mentoring teens, basketball coaching, public speaking.",
+    backgroundCheck: { status: "Expired", completionDate: "2024-11-20", organization: "VerifiedCheck Group" }
   },
   {
+    firstName: "Emily",
+    lastName: "Davis",
     name: "Emily Davis",
     email: "emily@email.com",
     phone: "555-777-8888",
-    role: "Caregiver Support",
-    availability: "Flexible",
-    notes: "New volunteer",
-    backgroundCheck: {
-      status: "None",
-      completionDate: "",
-      organization: ""
-    }
+    interestsTalents: "Music, sensory-friendly activities, sign language (beginner).",
+    backgroundCheck: { status: "None", completionDate: "", organization: "" }
   }
 ];
 
@@ -278,14 +237,14 @@ function renderVolunteers() {
   volunteers.forEach((v, index) => {
     const div = document.createElement("div");
     div.className = "volunteer";
-
-    const bg = v.backgroundCheck || { status: "None" };
+    const interests = v.interestsTalents || "";
+    const interestsLine = interests ? `<br><span class="small">${escapeHtml(interests)}</span>` : "";
 
     div.innerHTML = `
       <div>
         <strong>${escapeHtml(v.name)}</strong><br>
-        <span class="small">${escapeHtml(v.role)} • ${escapeHtml(v.availability)}</span><br>
-        <span class="small">Background Check: ${escapeHtml(bg.status)}</span>
+        <span class="small">${escapeHtml(v.email || "")}${v.phone ? " &bull; " + escapeHtml(v.phone) : ""}</span>
+        ${interestsLine}
       </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
         <button type="button" onclick="goToBackground(${index})">View</button>
@@ -317,31 +276,57 @@ function clearAll() {
   }
 }
 
+function clearInvalid() {
+  ["firstName", "lastName", "email", "phone", "interests"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove("invalid");
+  });
+  document.getElementById("errorMsg").style.display = "none";
+}
+
+function showConfirmation() {
+  const el = document.getElementById("confirmation");
+  el.style.display = "block";
+  setTimeout(() => { el.style.display = "none"; }, 4000);
+}
+
 document.getElementById("volunteerForm").addEventListener("submit", function(e) {
   e.preventDefault();
+  clearInvalid();
 
-  const status = document.getElementById("bgStatus").value;
-  const completionDate = document.getElementById("completionDate").value;
-  const organization = document.getElementById("organization").value.trim();
+  const firstEl = document.getElementById("firstName");
+  const lastEl = document.getElementById("lastName");
+  const emailEl = document.getElementById("email");
+  const phoneEl = document.getElementById("phone");
+  const interestsEl = document.getElementById("interests");
+
+  const firstName = firstEl.value.trim();
+  const lastName = lastEl.value.trim();
+
+  let valid = true;
+  if (!firstName) { firstEl.classList.add("invalid"); valid = false; }
+  if (!lastName) { lastEl.classList.add("invalid"); valid = false; }
+
+  if (!valid) {
+    document.getElementById("errorMsg").style.display = "block";
+    return;
+  }
 
   const newVolunteer = {
-    name: document.getElementById("name").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    phone: document.getElementById("phone").value.trim(),
-    role: document.getElementById("role").value,
-    availability: document.getElementById("availability").value,
-    notes: document.getElementById("notes").value.trim(),
-    backgroundCheck: {
-      status: status,
-      completionDate: status === "None" ? "" : completionDate,
-      organization: status === "None" ? "" : organization
-    }
+    firstName: firstName,
+    lastName: lastName,
+    name: firstName + " " + lastName,
+    email: emailEl.value.trim(),
+    phone: phoneEl.value.trim(),
+    interestsTalents: interestsEl.value.trim(),
+    backgroundCheck: { status: "None", completionDate: "", organization: "" }
   };
 
   volunteers.push(newVolunteer);
   saveData();
   renderVolunteers();
   this.reset();
+  showConfirmation();
 });
 
 renderVolunteers();
