@@ -146,6 +146,37 @@
       opacity: 0.55;
       border-left-color: #999;
     }
+    .slot-card.selected {
+      background: #fff3cd;
+      border-left-color: #ffc107;
+      box-shadow: 0 0 0 2px #ffc107;
+    }
+    .view-times-btn {
+      width: auto;
+      padding: 12px 22px;
+      margin: 0 0 16px 0;
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .view-times-btn:hover { background: #0056b3; }
+    .empty-slots {
+      background: #f8f9fa;
+      border-left: 5px solid #6c757d;
+      padding: 14px;
+      border-radius: 8px;
+      color: #495057;
+      font-size: 15px;
+    }
+    .prompt {
+      color: #555;
+      font-style: italic;
+      padding: 12px 0;
+    }
 
     .slot-info {
       flex: 1;
@@ -209,8 +240,10 @@
   <div class="page-wrap">
     <div class="container">
       <h1>Available Appointments</h1>
-      <p style="text-align:center; color:#555;">Select an open time slot to book, or browse what's available.</p>
-      <div id="slotList"></div>
+      <p style="text-align:center; color:#555;">Click the button below to view open time slots.</p>
+      <button type="button" class="view-times-btn" onclick="viewAvailableTimes()">View Available Appointment Times</button>
+      <div id="slotPrompt" class="prompt">Available appointment times will appear here.</div>
+      <div id="slotList" style="display:none;"></div>
     </div>
 
     <div class="container">
@@ -329,6 +362,15 @@
       return h + ":" + m + " " + ampm;
     }
 
+    var timesViewed = false;
+
+    function viewAvailableTimes() {
+      timesViewed = true;
+      document.getElementById("slotPrompt").style.display = "none";
+      document.getElementById("slotList").style.display = "block";
+      renderSlots();
+    }
+
     function renderSlots() {
       var listEl = document.getElementById("slotList");
       var selectEl = document.getElementById("slotSelect");
@@ -342,10 +384,13 @@
         return a.time.localeCompare(b.time);
       });
 
+      var availableCount = 0;
+
       sorted.forEach(function(slot) {
         var isBooked = !!bookedIds[slot.id];
         var div = document.createElement("div");
         div.className = "slot-card" + (isBooked ? " booked" : "");
+        div.id = "slot-" + slot.id;
 
         var dateLabel = formatDate(slot.date);
         var timeLabel = formatTime(slot.time);
@@ -363,6 +408,7 @@
         listEl.appendChild(div);
 
         if (!isBooked) {
+          availableCount++;
           var opt = document.createElement("option");
           opt.value = slot.id;
           opt.textContent = dateLabel + " " + timeLabel + " - " + slot.type + " (" + slot.provider + ")";
@@ -370,7 +416,9 @@
         }
       });
 
-      if (selectEl.options.length === 1) {
+      if (availableCount === 0) {
+        listEl.innerHTML =
+          '<div class="empty-slots">There are no available appointments at this time. Please check back later.</div>';
         var opt = document.createElement("option");
         opt.value = "";
         opt.disabled = true;
@@ -382,6 +430,14 @@
     function selectSlot(slotId) {
       var selectEl = document.getElementById("slotSelect");
       selectEl.value = slotId;
+
+      var cards = document.querySelectorAll(".slot-card");
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].classList.remove("selected");
+      }
+      var target = document.getElementById("slot-" + slotId);
+      if (target) target.classList.add("selected");
+
       document.getElementById("name").focus();
     }
 
@@ -450,11 +506,10 @@
 
       messageEl.textContent = "Appointment booked successfully!";
       form.reset();
-      renderSlots();
+      if (timesViewed) renderSlots();
       displayAppointments();
     });
 
-    renderSlots();
     displayAppointments();
   </script>
 </body>
